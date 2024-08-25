@@ -41,7 +41,7 @@ void ALabyrinthCharacter::PossessedBy(AController* NewController)
 	// Init ability actor info for the Server
 	InitAbilityActorInfo();
 
-	//TODO: Re-enable after saving and loading is figured out
+	// 
 	// LoadProgress();
 	//
 	// if (AAuraGameModeBase* AuraGameMode = Cast<AAuraGameModeBase>(UGameplayStatics::GetGameMode(this)))
