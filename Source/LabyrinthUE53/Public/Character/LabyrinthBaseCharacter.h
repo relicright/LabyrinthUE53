@@ -3,26 +3,33 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AbilitySystemInterface.h"
 #include "GameFramework/Character.h"
 #include "Interaction/CombatInterface.h"
 #include "LabyrinthBaseCharacter.generated.h"
 
-UCLASS()
-class LABYRINTHUE53_API ALabyrinthBaseCharacter : public ACharacter
+class UAbilitySystemComponent;
+class UAttributeSet;
+class UGameplayEffect;
+class UGameplayAbility;
+class UAnimMontage;
+
+UCLASS(Abstract)
+class LABYRINTHUE53_API ALabyrinthBaseCharacter : public ACharacter, public IAbilitySystemInterface, public ICombatInterface
 {
 	GENERATED_BODY()
 
 public:
 	
 	ALabyrinthBaseCharacter();
-
 	virtual void Tick(float DeltaTime) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const;
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-
-	//FOnASCRegistered OnAscRegistered;
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	
+	FOnASCRegistered OnAscRegistered;
 	FOnDeathSignature OnDeathDelegate;
 	FOnDamageSignature OnDamageDelegate;
 
@@ -47,4 +54,12 @@ protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Combat")
 	float BaseWalkSpeed = 600.f;
+
+	virtual void InitAbilityActorInfo();
+
+	UPROPERTY()
+	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
+
+	UPROPERTY()
+	TObjectPtr<UAttributeSet> AttributeSet;
 };

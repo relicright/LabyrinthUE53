@@ -26,10 +26,12 @@ void ALabyrinthBaseCharacter::BeginPlay()
 	
 }
 
+void ALabyrinthBaseCharacter::InitAbilityActorInfo()
+{
+}
+
 void ALabyrinthBaseCharacter::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
-
 }
 
 void ALabyrinthBaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -51,5 +53,10 @@ void ALabyrinthBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerI
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+UAbilitySystemComponent* ALabyrinthBaseCharacter::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
 }
 

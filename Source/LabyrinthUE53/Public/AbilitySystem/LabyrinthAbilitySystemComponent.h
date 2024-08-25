@@ -6,6 +6,8 @@
 #include "AbilitySystemComponent.h"
 #include "LabyrinthAbilitySystemComponent.generated.h"
 
+DECLARE_MULTICAST_DELEGATE_OneParam(FEffectAssetTags, const FGameplayTagContainer& /*AssetTags*/);
+
 /**
  * 
  */
@@ -15,7 +17,18 @@ class LABYRINTHUE53_API ULabyrinthAbilitySystemComponent : public UAbilitySystem
 	GENERATED_BODY()
 
 public:
+	void AbilityActorInfoSet();
+	
 	void AbilityInputTagPressed(const FGameplayTag& InputTag);
 	void AbilityInputTagHeld(const FGameplayTag& InputTag);
 	void AbilityInputTagReleased(const FGameplayTag& InputTag);
+
+	/* DELEGATES */
+	FEffectAssetTags EffectAssetTags;
+
+protected:
+
+	UFUNCTION(Client, Reliable)
+	void ClientEffectApplied(UAbilitySystemComponent* AbilitySystemComponent, const FGameplayEffectSpec& EffectSpec, FActiveGameplayEffectHandle ActiveEffectHandle);
+
 };

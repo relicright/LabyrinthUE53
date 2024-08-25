@@ -7,7 +7,11 @@
 #include "GameplayTagContainer.h"
 #include "CombatInterface.generated.h"
 
-//DECLARE_MULTICAST_DELEGATE_OneParam(FOnASCRegistered, UAbilitySystemComponent*)
+class UAbilitySystemComponent;
+class UNiagaraSystem;
+class UAnimMontage;
+
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnASCRegistered, UAbilitySystemComponent*)
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDeathSignature, AActor*, DeadActor);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnDamageSignature, float /*DamageAmount*/);
 
@@ -46,57 +50,57 @@ class LABYRINTHUE53_API ICombatInterface
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 
-	UFUNCTION(BlueprintNativeEvent)
-	int32 GetPlayerLevel();
-
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	FVector GetCombatSocketLocation(const FGameplayTag& MontageTag);
-
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void UpdateFacingTarget(const FVector& Target);
-
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	UAnimMontage* GetHitReactMontage();
-
-	virtual void Die(const FVector& DeathImpulse) = 0;
-	virtual FOnDeathSignature& GetOnDeathDelegate() = 0;
-	virtual FOnDamageSignature& GetOnDamageSignature() = 0; 
-
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	bool IsDead() const;
-
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	AActor* GetAvatar();
-
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	TArray<FTaggedMontage> GetAttackMontages();
-
-	// UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	// UNiagaraSystem* GetBloodEffect();
-
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	FTaggedMontage GetTaggedMontageByTag(const FGameplayTag& MontageTag);
-
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	int32 GetMinionCount();
-
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void IncremenetMinionCount(int32 Amount);
-
-	// UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	// ECharacterClass GetCharacterClass();
+	// UFUNCTION(BlueprintNativeEvent)
+	// int32 GetPlayerLevel();
 	//
-	// virtual FOnASCRegistered& GetOnASCRegisteredDelegate() = 0;
-
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void SetInShockLoop(bool bInLoop);
-
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	USkeletalMeshComponent* GetWeapon();
-
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	bool IsBeingShocked() const;
-
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void SetIsBeingShocked(bool bInShock);
+	// UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	// FVector GetCombatSocketLocation(const FGameplayTag& MontageTag);
+	//
+	// UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	// void UpdateFacingTarget(const FVector& Target);
+	//
+	// UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	// UAnimMontage* GetHitReactMontage();
+	//
+	// virtual void Die(const FVector& DeathImpulse) = 0;
+	// virtual FOnDeathSignature& GetOnDeathDelegate() = 0;
+	// virtual FOnDamageSignature& GetOnDamageSignature() = 0; 
+	//
+	// UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	// bool IsDead() const;
+	//
+	// UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	// AActor* GetAvatar();
+	//
+	// UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	// TArray<FTaggedMontage> GetAttackMontages();
+	//
+	// // UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	// // UNiagaraSystem* GetBloodEffect();
+	//
+	// UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	// FTaggedMontage GetTaggedMontageByTag(const FGameplayTag& MontageTag);
+	//
+	// UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	// int32 GetMinionCount();
+	//
+	// UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	// void IncremenetMinionCount(int32 Amount);
+	//
+	// // UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	// // ECharacterClass GetCharacterClass();
+	// //
+	// // virtual FOnASCRegistered& GetOnASCRegisteredDelegate() = 0;
+	//
+	// UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	// void SetInShockLoop(bool bInLoop);
+	//
+	// UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	// USkeletalMeshComponent* GetWeapon();
+	//
+	// UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	// bool IsBeingShocked() const;
+	//
+	// UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	// void SetIsBeingShocked(bool bInShock);
 };

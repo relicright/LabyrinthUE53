@@ -3,6 +3,11 @@
 
 #include "AbilitySystem/LabyrinthAbilitySystemComponent.h"
 
+void ULabyrinthAbilitySystemComponent::AbilityActorInfoSet()
+{
+	OnGameplayEffectAppliedDelegateToSelf.AddUObject(this, &ULabyrinthAbilitySystemComponent::ClientEffectApplied);
+}
+
 void ULabyrinthAbilitySystemComponent::AbilityInputTagPressed(const FGameplayTag& InputTag)
 {
 	if (!InputTag.IsValid()) return;
@@ -49,4 +54,14 @@ void ULabyrinthAbilitySystemComponent::AbilityInputTagReleased(const FGameplayTa
 			InvokeReplicatedEvent(EAbilityGenericReplicatedEvent::InputReleased, AbilitySpec.Handle, AbilitySpec.ActivationInfo.GetActivationPredictionKey());
 		}
 	}
+}
+
+void ULabyrinthAbilitySystemComponent::ClientEffectApplied_Implementation(
+	UAbilitySystemComponent* AbilitySystemComponent, const FGameplayEffectSpec& EffectSpec,
+	FActiveGameplayEffectHandle ActiveEffectHandle)
+{
+	FGameplayTagContainer TagContainer;
+	EffectSpec.GetAllAssetTags(TagContainer);
+
+	EffectAssetTags.Broadcast(TagContainer);
 }
