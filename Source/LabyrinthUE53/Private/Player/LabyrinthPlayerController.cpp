@@ -20,6 +20,7 @@
 ALabyrinthPlayerController::ALabyrinthPlayerController()
 {
 	bReplicates = true;
+	Spline = CreateDefaultSubobject<USplineComponent>("Spline");
 }
 
 void ALabyrinthPlayerController::BeginPlay()
@@ -46,11 +47,11 @@ void ALabyrinthPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
-	ULabyrinthInputComponent* AuraInputComponent = CastChecked<ULabyrinthInputComponent>(InputComponent);
-	AuraInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ALabyrinthPlayerController::Move);
-	AuraInputComponent->BindAction(ShiftAction, ETriggerEvent::Started, this, &ALabyrinthPlayerController::ShiftPressed);
-	AuraInputComponent->BindAction(ShiftAction, ETriggerEvent::Completed, this, &ALabyrinthPlayerController::ShiftReleased);
-	AuraInputComponent->BindAbilityActions(InputConfig, this, &ThisClass::AbilityInputTagPressed, &ThisClass::AbilityInputTagReleased, &ThisClass::AbilityInputTagHeld);
+	ULabyrinthInputComponent* LabyrinthInputComponent = CastChecked<ULabyrinthInputComponent>(InputComponent);
+	LabyrinthInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ALabyrinthPlayerController::Move);
+	LabyrinthInputComponent->BindAction(ShiftAction, ETriggerEvent::Started, this, &ALabyrinthPlayerController::ShiftPressed);
+	LabyrinthInputComponent->BindAction(ShiftAction, ETriggerEvent::Completed, this, &ALabyrinthPlayerController::ShiftReleased);
+	LabyrinthInputComponent->BindAbilityActions(InputConfig, this, &ThisClass::AbilityInputTagPressed, &ThisClass::AbilityInputTagReleased, &ThisClass::AbilityInputTagHeld);
 }
 
 void ALabyrinthPlayerController::Move(const FInputActionValue& InputActionValue)
