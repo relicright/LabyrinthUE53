@@ -3,9 +3,40 @@
 
 #include "AbilitySystem/LabyrinthAbilitySystemComponent.h"
 
+#include "LabyrinthGameplayTags.h"
+#include "AbilitySystem/Abilities/LabyrinthGameplayAbility.h"
+
 void ULabyrinthAbilitySystemComponent::AbilityActorInfoSet()
 {
 	OnGameplayEffectAppliedDelegateToSelf.AddUObject(this, &ULabyrinthAbilitySystemComponent::ClientEffectApplied);
+}
+
+void ULabyrinthAbilitySystemComponent::AddCharacterAbilities(
+	const TArray<TSubclassOf<UGameplayAbility>>& StartupAbilities)
+{
+	for (const TSubclassOf<UGameplayAbility> AbilityClass : StartupAbilities)
+	{
+		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, 1);
+		if (const ULabyrinthGameplayAbility* AuraAbility = Cast<ULabyrinthGameplayAbility>(AbilitySpec.Ability))
+		{
+			AbilitySpec.DynamicAbilityTags.AddTag(AuraAbility->StartupInputTag);
+			AbilitySpec.DynamicAbilityTags.AddTag(FLabyrinthGameplayTags::Get().Abilities_Status_Equipped);
+			GiveAbility(AbilitySpec);
+		}
+	}
+	bStartupAbilitiesGiven = true;
+	AbilitiesGivenDelegate.Broadcast();
+}
+
+void ULabyrinthAbilitySystemComponent::AddCharacterPassiveAbilities(
+	const TArray<TSubclassOf<UGameplayAbility>>& StartupPassiveAbilities)
+{
+	for (const TSubclassOf<UGameplayAbility> AbilityClass : StartupPassiveAbilities)
+	{
+		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, 1);
+		AbilitySpec.DynamicAbilityTags.AddTag(FLabyrinthGameplayTags::Get().Abilities_Status_Equipped);
+		GiveAbilityAndActivateOnce(AbilitySpec);
+	}
 }
 
 void ULabyrinthAbilitySystemComponent::AbilityInputTagPressed(const FGameplayTag& InputTag)

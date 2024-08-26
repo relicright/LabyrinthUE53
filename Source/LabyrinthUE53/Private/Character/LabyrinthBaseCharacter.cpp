@@ -3,7 +3,10 @@
 
 #include "Character/LabyrinthBaseCharacter.h"
 
+#include "AbilitySystemComponent.h"
+#include "GameplayEffectTypes.h"
 #include "LabyrinthGameplayTags.h"
+#include "AbilitySystem/LabyrinthAbilitySystemComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "LabyrinthUE53/LabyrinthUE53.h"
 
@@ -12,6 +15,10 @@ ALabyrinthBaseCharacter::ALabyrinthBaseCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	const FLabyrinthGameplayTags& GameplayTags = FLabyrinthGameplayTags::Get();
+
+	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>("Weapon");
+	Weapon->SetupAttachment(GetMesh(), FName("WeaponHandSocket"));
+	Weapon->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 	GetCapsuleComponent()->SetGenerateOverlapEvents(false);
@@ -30,8 +37,36 @@ void ALabyrinthBaseCharacter::InitAbilityActorInfo()
 {
 }
 
+void ALabyrinthBaseCharacter::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass, float Level) const
+{
+	check(IsValid(GetAbilitySystemComponent()));
+	check(GameplayEffectClass);
+	FGameplayEffectContextHandle ContextHandle = GetAbilitySystemComponent()->MakeEffectContext();
+	ContextHandle.AddSourceObject(this);
+	const FGameplayEffectSpecHandle SpecHandle = GetAbilitySystemComponent()->MakeOutgoingSpec(GameplayEffectClass, Level, ContextHandle);
+	GetAbilitySystemComponent()->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), GetAbilitySystemComponent());
+}
+
+void ALabyrinthBaseCharacter::InitializeDefaultAttributes() const
+{
+	ApplyEffectToSelf(DefaultPrimaryAttributes, 1.f);
+	ApplyEffectToSelf(DefaultSecondaryAttributes, 1.f);
+	ApplyEffectToSelf(DefaultVitalAttributes, 1.f);
+}
+
+void ALabyrinthBaseCharacter::AddCharacterAbilities()
+{
+	ULabyrinthAbilitySystemComponent* LabyrinthASC = CastChecked<ULabyrinthAbilitySystemComponent>(AbilitySystemComponent);
+	if (!HasAuthority()) return;
+
+	LabyrinthASC->AddCharacterAbilities(StartupAbilities);
+	LabyrinthASC->AddCharacterPassiveAbilities(StartupPassiveAbilities);
+}
+
 void ALabyrinthBaseCharacter::Tick(float DeltaTime)
 {
+	Super::Tick(DeltaTime);
+
 }
 
 void ALabyrinthBaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -49,14 +84,67 @@ float ALabyrinthBaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const
 	return DamageTaken;
 }
 
-void ALabyrinthBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-}
-
 UAbilitySystemComponent* ALabyrinthBaseCharacter::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
+}
+
+UAnimMontage* ALabyrinthBaseCharacter::GetHitReactMontage_Implementation()
+{
+	return HitReactMontage;
+}
+
+FVector ALabyrinthBaseCharacter::GetCombatSocketLocation_Implementation(const FGameplayTag& MontageTag)
+{
+	const FLabyrinthGameplayTags& GameplayTags = FLabyrinthGameplayTags::Get();
+	if (MontageTag.MatchesTagExact(GameplayTags.CombatSocket_Weapon) && IsValid(Weapon))
+	{
+		return Weapon->GetSocketLocation(WeaponTipSocketName);
+	}
+	if (MontageTag.MatchesTagExact(GameplayTags.CombatSocket_LeftHand))
+	{
+		return GetMesh()->GetSocketLocation(LeftHandSocketName);
+	}
+	if (MontageTag.MatchesTagExact(GameplayTags.CombatSocket_RightHand))
+	{
+		return GetMesh()->GetSocketLocation(RightHandSocketName);
+	}
+	// if (MontageTag.MatchesTagExact(GameplayTags.CombatSocket_Tail))
+	// {
+	// 	return GetMesh()->GetSocketLocation(TailSocketName);
+	// }
+	return FVector();
+}
+
+AActor* ALabyrinthBaseCharacter::GetAvatar_Implementation()
+{
+	return this;
+}
+
+TArray<FTaggedMontage> ALabyrinthBaseCharacter::GetAttackMontages_Implementation()
+{
+	return AttackMontages;
+}
+
+FTaggedMontage ALabyrinthBaseCharacter::GetTaggedMontageByTag_Implementation(const FGameplayTag& MontageTag)
+{
+	for (FTaggedMontage TaggedMontage : AttackMontages)
+	{
+		if (TaggedMontage.MontageTag == MontageTag)
+		{
+			return TaggedMontage;
+		}
+	}
+	return FTaggedMontage();
+}
+
+ECharacterClass ALabyrinthBaseCharacter::GetCharacterClass_Implementation()
+{
+	return CharacterClass;
+}
+
+USkeletalMeshComponent* ALabyrinthBaseCharacter::GetWeapon_Implementation()
+{
+	return Weapon;
 }
 

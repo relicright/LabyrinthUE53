@@ -177,6 +177,24 @@ void FLabyrinthGameplayTags::InitializeNativeGameplayTags()
 		FName("Attributes.SecondarySkill.Thievery"),
 		FString("Thievery Abilities")
 		);
+
+	/*
+	* Vital Attributes
+	*/
+
+	GameplayTags.Attributes_Vital_Health = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Vital.Health"),
+		FString("Health Attributes")
+		);
+
+	GameplayTags.Attributes_Vital_Mana = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Vital.Mana"),
+		FString("Mana Attributes")
+		);
+	GameplayTags.Attributes_Vital_Stamina = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Vital.Stamina"),
+		FString("Stamina Attributes")
+		);
 	
 	/*
 	 * Input Tags

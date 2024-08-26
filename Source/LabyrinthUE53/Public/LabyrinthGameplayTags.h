@@ -48,6 +48,10 @@ public:
 	FGameplayTag Attributes_SecondarySkill_Stealth;
 	FGameplayTag Attributes_SecondarySkill_Musicianship;
 	FGameplayTag Attributes_SecondarySkill_Thievery;
+
+	FGameplayTag Attributes_Vital_Health;
+	FGameplayTag Attributes_Vital_Mana;
+	FGameplayTag Attributes_Vital_Stamina;
 	
 	FGameplayTag Attributes_Meta_IncomingXP;
 

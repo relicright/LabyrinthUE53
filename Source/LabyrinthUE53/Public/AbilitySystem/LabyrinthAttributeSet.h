@@ -244,6 +244,10 @@ public:
 	FGameplayAttributeData Mana;
 	ATTRIBUTE_ACCESSORS(ULabyrinthAttributeSet, Mana);
 
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Stamina, Category = "Vital Attributes")
+	FGameplayAttributeData Stamina;
+	ATTRIBUTE_ACCESSORS(ULabyrinthAttributeSet, Stamina);
+
 
 	/*
 	 * Meta Attributes
@@ -262,6 +266,9 @@ public:
 
 	UFUNCTION()
 	void OnRep_Mana(const FGameplayAttributeData& OldMana) const;
+	
+	UFUNCTION()
+	void OnRep_Stamina(const FGameplayAttributeData& OldStamina) const;
 
 	UFUNCTION()
 	void OnRep_Strength(const FGameplayAttributeData& OldStrength) const;

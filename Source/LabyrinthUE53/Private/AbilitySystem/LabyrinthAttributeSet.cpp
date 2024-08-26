@@ -47,6 +47,11 @@ ULabyrinthAttributeSet::ULabyrinthAttributeSet()
 	TagsToAttributes.Add(GameplayTags.Attributes_SecondarySkill_Stealth, GetStealthAttribute);
 	TagsToAttributes.Add(GameplayTags.Attributes_SecondarySkill_Musicianship, GetMusicianshipAttribute);
 	TagsToAttributes.Add(GameplayTags.Attributes_SecondarySkill_Thievery, GetThieveryAttribute);
+
+	/* Vital Attributes */
+	TagsToAttributes.Add(GameplayTags.Attributes_Vital_Health, GetHealthAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Vital_Mana, GetManaAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Vital_Stamina, GetStaminaAttribute);
 	
 	/* Resistance Attributes */
 	TagsToAttributes.Add(GameplayTags.Attributes_Resistance_Arcane, GetArcaneResistanceAttribute);
@@ -136,6 +141,11 @@ void ULabyrinthAttributeSet::OnRep_Health(const FGameplayAttributeData& OldHealt
 void ULabyrinthAttributeSet::OnRep_Mana(const FGameplayAttributeData& OldMana) const
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(ULabyrinthAttributeSet, Mana, OldMana);
+}
+
+void ULabyrinthAttributeSet::OnRep_Stamina(const FGameplayAttributeData& OldStamina) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(ULabyrinthAttributeSet, Stamina, OldStamina);
 }
 
 void ULabyrinthAttributeSet::OnRep_Strength(const FGameplayAttributeData& OldStrength) const
