@@ -10,6 +10,7 @@
 #include "NavigationPath.h"
 #include "NavigationSystem.h"
 #include "AbilitySystem/LabyrinthAbilitySystemComponent.h"
+#include "Character/LabyrinthCharacter.h"
 #include "Input/LabyrinthInputComponent.h"
 #include "Interaction/EnemyInterface.h"
 #include "GameFramework/Character.h"

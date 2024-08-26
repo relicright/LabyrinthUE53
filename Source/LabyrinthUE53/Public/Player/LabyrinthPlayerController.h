@@ -15,6 +15,8 @@ class ULabyrinthInputConfig;
 class ULabyrinthAbilitySystemComponent;
 class USplineComponent;
 
+class UGameplayEffect;
+
 enum class ETargetingStatus : uint8
 {
 	TargetingEnemy,
@@ -87,4 +89,5 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USplineComponent> Spline;
+
 };

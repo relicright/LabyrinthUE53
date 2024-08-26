@@ -33,6 +33,8 @@ ALabyrinthCharacter::ALabyrinthCharacter()
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationRoll = false;
 	bUseControllerRotationYaw = false;
+
+	CharacterClass = ECharacterClass::WarTemplar;
 }
 
 void ALabyrinthCharacter::PossessedBy(AController* NewController)
@@ -41,7 +43,6 @@ void ALabyrinthCharacter::PossessedBy(AController* NewController)
 
 	// Init ability actor info for the Server
 	InitAbilityActorInfo();
-
 	InitializeDefaultAttributes();
 	AddCharacterAbilities();
 

@@ -2,9 +2,9 @@
 
 
 #include "AbilitySystem/LabyrinthAbilitySystemGlobals.h"
+#include "LabyrinthAbilityTypes.h"
 
 FGameplayEffectContext* ULabyrinthAbilitySystemGlobals::AllocGameplayEffectContext() const
 {
-	return Super::AllocGameplayEffectContext();
-	//return new FLabyrinthGameplayEffectContext;
+	return new FLabyrinthGameplayEffectContext;
 }

@@ -75,7 +75,7 @@ struct FDamageEffectParams
 };
 
 USTRUCT(BlueprintType)
-struct FAuraGameplayEffectContext : public FGameplayEffectContext
+struct FLabyrinthGameplayEffectContext : public FGameplayEffectContext
 {
 	GENERATED_BODY()
 
@@ -173,7 +173,7 @@ protected:
 };
 
 template<>
-struct TStructOpsTypeTraits<FAuraGameplayEffectContext> : public TStructOpsTypeTraitsBase2<FAuraGameplayEffectContext>
+struct TStructOpsTypeTraits<FLabyrinthGameplayEffectContext> : public TStructOpsTypeTraitsBase2<FLabyrinthGameplayEffectContext>
 {
 	enum
 	{

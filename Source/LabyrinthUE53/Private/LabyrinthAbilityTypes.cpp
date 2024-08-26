@@ -1,6 +1,6 @@
 #include "LabyrinthAbilityTypes.h"
 
-bool FAuraGameplayEffectContext::NetSerialize(FArchive& Ar, UPackageMap* Map, bool& bOutSuccess)
+bool FLabyrinthGameplayEffectContext::NetSerialize(FArchive& Ar, UPackageMap* Map, bool& bOutSuccess)
 {
 	uint32 RepBits = 0;
 	if (Ar.IsSaving())
