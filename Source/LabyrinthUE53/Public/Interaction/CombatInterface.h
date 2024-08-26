@@ -62,12 +62,12 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	UAnimMontage* GetHitReactMontage();
 	
-	// virtual void Die(const FVector& DeathImpulse) = 0;
-	// virtual FOnDeathSignature& GetOnDeathDelegate() = 0;
-	// virtual FOnDamageSignature& GetOnDamageSignature() = 0; 
-	//
-	// UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	// bool IsDead() const;
+	virtual void Die(const FVector& DeathImpulse) = 0;
+	virtual FOnDeathSignature& GetOnDeathDelegate() = 0;
+	virtual FOnDamageSignature& GetOnDamageSignature() = 0; 
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	bool IsDead() const;
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	AActor* GetAvatar();
@@ -75,8 +75,8 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	TArray<FTaggedMontage> GetAttackMontages();
 	
-	// UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	// UNiagaraSystem* GetBloodEffect();
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	UNiagaraSystem* GetBloodEffect();
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	FTaggedMontage GetTaggedMontageByTag(const FGameplayTag& MontageTag);
@@ -90,7 +90,7 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	ECharacterClass GetCharacterClass();
 	
-	// virtual FOnASCRegistered& GetOnASCRegisteredDelegate() = 0;
+	virtual FOnASCRegistered& GetOnASCRegisteredDelegate() = 0;
 	
 	// UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	// void SetInShockLoop(bool bInLoop);

@@ -111,10 +111,10 @@ FVector ALabyrinthBaseCharacter::GetCombatSocketLocation_Implementation(const FG
 	{
 		return GetMesh()->GetSocketLocation(RightHandSocketName);
 	}
-	// if (MontageTag.MatchesTagExact(GameplayTags.CombatSocket_Tail))
-	// {
-	// 	return GetMesh()->GetSocketLocation(TailSocketName);
-	// }
+	if (MontageTag.MatchesTagExact(GameplayTags.CombatSocket_Body))
+	{
+		return GetMesh()->GetSocketLocation(BodySocketName);
+	}
 	return FVector();
 }
 
@@ -148,5 +148,46 @@ ECharacterClass ALabyrinthBaseCharacter::GetCharacterClass_Implementation()
 USkeletalMeshComponent* ALabyrinthBaseCharacter::GetWeapon_Implementation()
 {
 	return Weapon;
+}
+
+void ALabyrinthBaseCharacter::Die(const FVector& DeathImpulse)
+{
+	// Weapon->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld, true));
+	// MulticastHandleDeath(DeathImpulse);
+}
+
+FOnDeathSignature& ALabyrinthBaseCharacter::GetOnDeathDelegate()
+{
+	return OnDeathDelegate;
+}
+
+FOnDamageSignature& ALabyrinthBaseCharacter::GetOnDamageSignature()
+{
+	return OnDamageDelegate;
+}
+
+int32 ALabyrinthBaseCharacter::GetMinionCount_Implementation()
+{
+	return MinionCount;
+}
+
+bool ALabyrinthBaseCharacter::IsDead_Implementation() const
+{
+	return IsDead();
+}
+
+UNiagaraSystem* ALabyrinthBaseCharacter::GetBloodEffect_Implementation()
+{
+	return BloodEffect;
+}
+
+void ALabyrinthBaseCharacter::IncremenetMinionCount_Implementation(int32 Amount)
+{
+	MinionCount += Amount;
+}
+
+FOnASCRegistered& ALabyrinthBaseCharacter::GetOnASCRegisteredDelegate()
+{
+	return OnAscRegistered;
 }
 

@@ -442,6 +442,10 @@ void FLabyrinthGameplayTags::InitializeNativeGameplayTags()
 		FString("Left Hand")
 		);
 
+	GameplayTags.CombatSocket_Body = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("CombatSocket.Body"),
+		FString("Body Part")
+		);
 
 	/*
 	 * Montage Tags

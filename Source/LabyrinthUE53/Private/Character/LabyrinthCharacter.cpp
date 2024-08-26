@@ -9,6 +9,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Player/LabyrinthPlayerState.h"
 #include "LabyrinthUE53/Public/Interaction/CombatInterface.h"
 #include "Player/LabyrinthPlayerController.h"
@@ -59,6 +60,113 @@ void ALabyrinthCharacter::OnRep_PlayerState()
 
 	// Init ability actor info for the Client
 	InitAbilityActorInfo();
+}
+
+void ALabyrinthCharacter::AddToXP_Implementation(int32 InXP)
+{
+	ALabyrinthPlayerState* LabyrinthPlayerState = GetPlayerState<ALabyrinthPlayerState>();
+	check(LabyrinthPlayerState);
+	LabyrinthPlayerState->AddToXP(InXP);
+}
+
+void ALabyrinthCharacter::LevelUp_Implementation()
+{
+	
+}
+
+int32 ALabyrinthCharacter::GetXP_Implementation() const
+{
+	const ALabyrinthPlayerState* LabyrinthPlayerState = GetPlayerState<ALabyrinthPlayerState>();
+	check(LabyrinthPlayerState);
+	return LabyrinthPlayerState->GetXP();
+}
+
+int32 ALabyrinthCharacter::FindLevelForXP_Implementation(int32 InXP) const
+{
+	const ALabyrinthPlayerState* LabyrinthPlayerState = GetPlayerState<ALabyrinthPlayerState>();
+	check(LabyrinthPlayerState);
+	//return LabyrinthPlayerState->LevelUpInfo->FindLevelForXP(InXP);
+	return 0; // Change this later
+}
+
+int32 ALabyrinthCharacter::GetAttributePointsReward_Implementation(int32 Level) const
+{
+	const ALabyrinthPlayerState* LabyrinthPlayerState = GetPlayerState<ALabyrinthPlayerState>();
+	check(LabyrinthPlayerState);
+	//return LabyrinthPlayerState->LevelUpInfo->LevelUpInformation[Level].AttributePointAward;
+	return 0; // Change this later
+}
+
+int32 ALabyrinthCharacter::GetSpellPointsReward_Implementation(int32 Level) const
+{
+	const ALabyrinthPlayerState* LabyrinthPlayerState = GetPlayerState<ALabyrinthPlayerState>();
+	check(LabyrinthPlayerState);
+	//return LabyrinthPlayerState->LevelUpInfo->LevelUpInformation[Level].SpellPointAward;
+	return 0; // Change this later
+}
+
+void ALabyrinthCharacter::AddToPlayerLevel_Implementation(int32 InPlayerLevel)
+{
+	ALabyrinthPlayerState* LabyrinthPlayerState = GetPlayerState<ALabyrinthPlayerState>();
+	check(LabyrinthPlayerState);
+	LabyrinthPlayerState->AddToLevel(InPlayerLevel);
+
+	if (ULabyrinthAbilitySystemComponent* AuraASC = Cast<ULabyrinthAbilitySystemComponent>(GetAbilitySystemComponent()))
+	{
+		//AuraASC->UpdateAbilityStatuses(AuraPlayerState->GetPlayerLevel());
+	}
+}
+
+void ALabyrinthCharacter::AddToAttributePoints_Implementation(int32 InAttributePoints)
+{
+	ALabyrinthPlayerState* LabyrinthPlayerState = GetPlayerState<ALabyrinthPlayerState>();
+	check(LabyrinthPlayerState);
+	LabyrinthPlayerState->AddToAttributePoints(InAttributePoints);
+}
+
+void ALabyrinthCharacter::AddToSpellPoints_Implementation(int32 InSpellPoints)
+{
+	ALabyrinthPlayerState* LabyrinthPlayerState = GetPlayerState<ALabyrinthPlayerState>();
+	check(LabyrinthPlayerState);
+	LabyrinthPlayerState->AddToSpellPoints(InSpellPoints);
+}
+
+int32 ALabyrinthCharacter::GetAttributePoints_Implementation() const
+{
+	ALabyrinthPlayerState* LabyrinthPlayerState = GetPlayerState<ALabyrinthPlayerState>();
+	check(LabyrinthPlayerState);
+	return LabyrinthPlayerState->GetAttributePoints();
+}
+
+int32 ALabyrinthCharacter::GetSpellPoints_Implementation() const
+{
+	ALabyrinthPlayerState* LabyrinthPlayerState = GetPlayerState<ALabyrinthPlayerState>();
+	check(LabyrinthPlayerState);
+	return LabyrinthPlayerState->GetSpellPoints();
+}
+
+int32 ALabyrinthCharacter::GetPlayerLevel_Implementation()
+{
+	const ALabyrinthPlayerState* LabyrinthPlayerState = GetPlayerState<ALabyrinthPlayerState>();
+	check(LabyrinthPlayerState);
+	return LabyrinthPlayerState->GetPlayerLevel();
+}
+
+void ALabyrinthCharacter::Die(const FVector& DeathImpulse)
+{
+	Super::Die(DeathImpulse);
+
+	// FTimerDelegate DeathTimerDelegate;
+	// DeathTimerDelegate.BindLambda([this]()
+	// {
+	// 	ALabyrinthGameModeBase* AuraGM = Cast<ALabyrinthGameModeBase>(UGameplayStatics::GetGameMode(this));
+	// 	if (AuraGM)
+	// 	{
+	// 		AuraGM->PlayerDied(this);
+	// 	}
+	// });
+	// GetWorldTimerManager().SetTimer(DeathTimer, DeathTimerDelegate, DeathTime, false);
+	// TopDownCameraComponent->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
 }
 
 void ALabyrinthCharacter::InitAbilityActorInfo()
