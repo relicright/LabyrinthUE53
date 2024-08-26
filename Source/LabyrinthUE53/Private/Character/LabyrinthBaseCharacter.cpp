@@ -51,6 +51,8 @@ void ALabyrinthBaseCharacter::InitializeDefaultAttributes() const
 {
 	ApplyEffectToSelf(DefaultPrimaryAttributes, 1.f);
 	ApplyEffectToSelf(DefaultSecondaryAttributes, 1.f);
+	ApplyEffectToSelf(DefaultPrimarySkillAttributes, 1.f);
+	ApplyEffectToSelf(DefaultSecondarySkillAttributes, 1.f);
 	ApplyEffectToSelf(DefaultVitalAttributes, 1.f);
 }
 

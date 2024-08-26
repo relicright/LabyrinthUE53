@@ -41,6 +41,9 @@ void ALabyrinthCharacter::PossessedBy(AController* NewController)
 	// Init ability actor info for the Server
 	InitAbilityActorInfo();
 
+	InitializeDefaultAttributes();
+	AddCharacterAbilities();
+
 	// 
 	// LoadProgress();
 	//

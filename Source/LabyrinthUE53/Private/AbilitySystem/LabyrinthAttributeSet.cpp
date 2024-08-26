@@ -107,6 +107,7 @@ void ULabyrinthAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty
 	
 	DOREPLIFETIME_CONDITION_NOTIFY(ULabyrinthAttributeSet, Health, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(ULabyrinthAttributeSet, Mana, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(ULabyrinthAttributeSet, Stamina, COND_None, REPNOTIFY_Always);
 }
 
 void ULabyrinthAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
