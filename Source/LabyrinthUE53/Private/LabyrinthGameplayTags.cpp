@@ -95,6 +95,11 @@ void FLabyrinthGameplayTags::InitializeNativeGameplayTags()
 		FString("Maximum amount of Mana obtainable")
 		);
 
+	GameplayTags.Attributes_Secondary_MaxStamina = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Secondary.MaxStamina"),
+		FString("Maximum amount of Stamina obtainable")
+		);
+
 	/*
 	* Primary Skill Attributes
 	*/
