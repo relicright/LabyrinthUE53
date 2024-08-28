@@ -10,6 +10,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Player/LabyrinthPlayerState.h"
 #include "LabyrinthUE53/Public/Interaction/CombatInterface.h"
 #include "Player/LabyrinthPlayerController.h"
@@ -25,7 +26,7 @@ ALabyrinthCharacter::ALabyrinthCharacter()
 	TopDownCameraComponent->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	TopDownCameraComponent->bUsePawnControlRotation = false;
 
-	GetCharacterMovement()->bOrientRotationToMovement = true;
+	GetCharacterMovement()->bOrientRotationToMovement = false;
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 400.f, 0.f);
 	GetCharacterMovement()->bConstrainToPlane = true;
 	GetCharacterMovement()->bSnapToPlaneAtStart = true;
@@ -168,6 +169,28 @@ void ALabyrinthCharacter::Die(const FVector& DeathImpulse)
 	// });
 	// GetWorldTimerManager().SetTimer(DeathTimer, DeathTimerDelegate, DeathTime, false);
 	// TopDownCameraComponent->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+}
+
+void ALabyrinthCharacter::SetCharacterPawnRotation(FRotator NewRotation)
+{
+	if (!bShouldFaceMouseCursor) return;
+	SetActorRotation( FMath::Lerp(GetActorRotation(), NewRotation, CharacterRotationSpeed) );
+	ServerSetCharacterPawnRotation(NewRotation);
+}
+
+void ALabyrinthCharacter::SetShouldFaceMouseCursor(bool bShouldFace)
+{
+	bShouldFaceMouseCursor = bShouldFace;
+}
+
+void ALabyrinthCharacter::ServerSetCharacterPawnRotation_Implementation(FRotator NewRotation)
+{
+	MulticastSetCharacterPawnRotation(NewRotation);
+}
+
+void ALabyrinthCharacter::MulticastSetCharacterPawnRotation_Implementation(FRotator NewRotation)
+{
+	SetActorRotation( FMath::Lerp(GetActorRotation(), NewRotation, CharacterRotationSpeed) );
 }
 
 void ALabyrinthCharacter::InitAbilityActorInfo()

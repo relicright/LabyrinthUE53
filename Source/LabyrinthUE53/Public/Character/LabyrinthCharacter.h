@@ -42,6 +42,17 @@ public:
 	virtual void Die(const FVector& DeathImpulse) override;
 	/** end Combat Interface */
 
+	void SetCharacterPawnRotation(FRotator NewRotation);
+	
+	UFUNCTION(Server, Reliable)
+	void ServerSetCharacterPawnRotation(FRotator NewRotation);
+	
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastSetCharacterPawnRotation(FRotator NewRotation);
+
+	UFUNCTION(BlueprintCallable, Category="Character")
+	void SetShouldFaceMouseCursor(bool bShouldFace);
+	
 private:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UCameraComponent> TopDownCameraComponent;
@@ -50,4 +61,9 @@ private:
 	TObjectPtr<USpringArmComponent> CameraBoom;
 	
 	virtual void InitAbilityActorInfo() override;
+
+	bool bShouldFaceMouseCursor = true;
+
+	UPROPERTY(EditDefaultsOnly, Category="Character", meta=(AllowPrivateAccess="true"))
+	float CharacterRotationSpeed = .05f;
 };

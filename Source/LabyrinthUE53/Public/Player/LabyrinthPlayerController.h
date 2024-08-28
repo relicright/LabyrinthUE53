@@ -7,6 +7,7 @@
 #include "GameplayTagContainer.h"
 #include "LabyrinthPlayerController.generated.h"
 
+class ALabyrinthCharacter;
 struct FInputActionValue;
 class IHighlightInterface;
 class UInputMappingContext;
@@ -33,8 +34,11 @@ class LABYRINTHUE53_API ALabyrinthPlayerController : public APlayerController
 	GENERATED_BODY()
 	
 public:
+
 	ALabyrinthPlayerController();
 	virtual void PlayerTick(float DeltaTime) override;
+
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 protected:
 	virtual void BeginPlay() override;
@@ -43,7 +47,12 @@ protected:
 	void Move(const FInputActionValue& InputActionValue);
 
 private:
+	
+	UPROPERTY(EditAnywhere, Category="Pawn")
+	TObjectPtr<ALabyrinthCharacter> ControlledPawn;
 
+	FRotator CharacterRotation;
+	
 	UPROPERTY(EditAnywhere, Category="Input")
 	TObjectPtr<UInputMappingContext> AuraContext;
 
@@ -77,6 +86,9 @@ private:
 	ULabyrinthAbilitySystemComponent* GetASC();
 	
 	void AutoRun();
+	void FaceMouseCursor();
+
+	bool bShouldFaceMouseCursor = true;
 
 	FVector CachedDestination = FVector::ZeroVector;
 	float FollowTime = 0.f;
@@ -89,5 +101,4 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USplineComponent> Spline;
-
 };

@@ -406,6 +406,13 @@ void FLabyrinthGameplayTags::InitializeNativeGameplayTags()
 		FString("Arcane Shards Ability Tag")
 		);
 
+
+	/* Passive */
+	GameplayTags.Abilities_Passive_ListenForEvent = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("Abilities.Passive.ListenForEvent"),
+			FString("Listen for Event")
+			);
+	
 	/*
 	 * Passive Spells
 	 */

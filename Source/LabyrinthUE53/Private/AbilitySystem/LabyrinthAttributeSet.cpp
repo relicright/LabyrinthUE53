@@ -104,7 +104,16 @@ void ULabyrinthAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty
 	DOREPLIFETIME_CONDITION_NOTIFY(ULabyrinthAttributeSet, Scoundrel, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(ULabyrinthAttributeSet, Alchemist, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(ULabyrinthAttributeSet, Constructor, COND_None, REPNOTIFY_Always);	
-	DOREPLIFETIME_CONDITION_NOTIFY(ULabyrinthAttributeSet, Summoner, COND_None, REPNOTIFY_Always);	
+	DOREPLIFETIME_CONDITION_NOTIFY(ULabyrinthAttributeSet, Summoner, COND_None, REPNOTIFY_Always);
+
+	// Secondary Skill Attributes
+	DOREPLIFETIME_CONDITION_NOTIFY(ULabyrinthAttributeSet, Acrobatics, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(ULabyrinthAttributeSet, Athletics, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(ULabyrinthAttributeSet, Perception, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(ULabyrinthAttributeSet, Survival, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(ULabyrinthAttributeSet, Stealth, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(ULabyrinthAttributeSet, Musicianship, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(ULabyrinthAttributeSet, Thievery, COND_None, REPNOTIFY_Always);	
 	
 	// Resistance Attributes
 

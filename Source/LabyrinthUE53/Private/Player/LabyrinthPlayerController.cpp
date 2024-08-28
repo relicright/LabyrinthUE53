@@ -13,15 +13,22 @@
 #include "Character/LabyrinthCharacter.h"
 #include "Input/LabyrinthInputComponent.h"
 #include "Interaction/EnemyInterface.h"
-#include "GameFramework/Character.h"
-#include "LabyrinthUE53/LabyrinthUE53.h"
-
-
+#include "Kismet/KismetMathLibrary.h"
+#include "Net/UnrealNetwork.h"
 
 ALabyrinthPlayerController::ALabyrinthPlayerController()
 {
 	bReplicates = true;
 	Spline = CreateDefaultSubobject<USplineComponent>("Spline");
+}
+
+void ALabyrinthPlayerController::PlayerTick(float DeltaTime)
+{
+	Super::PlayerTick(DeltaTime);
+	
+	CursorTrace();
+	AutoRun();
+	FaceMouseCursor();
 }
 
 void ALabyrinthPlayerController::BeginPlay()
@@ -69,19 +76,17 @@ void ALabyrinthPlayerController::Move(const FInputActionValue& InputActionValue)
 	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
-	if (APawn* ControlledPawn = GetPawn<APawn>())
+	if (IsValid(ControlledPawn))
 	{
 		ControlledPawn->AddMovementInput(ForwardDirection, InputAxisVector.Y);
 		ControlledPawn->AddMovementInput(RightDirection, InputAxisVector.X);
 	}
 }
 
-void ALabyrinthPlayerController::PlayerTick(float DeltaTime)
+void ALabyrinthPlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
-	Super::PlayerTick(DeltaTime);
-	CursorTrace();
-	AutoRun();
-	//UpdateMagicCircleLocation();
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
 }
 
 ULabyrinthAbilitySystemComponent* ALabyrinthPlayerController::GetASC()
@@ -96,7 +101,7 @@ ULabyrinthAbilitySystemComponent* ALabyrinthPlayerController::GetASC()
 void ALabyrinthPlayerController::AutoRun()
 {
 	if (!bAutoRunning) return;
-	if (APawn* ControlledPawn = GetPawn())
+	if (IsValid(ControlledPawn))
 	{
 		const FVector LocationOnSpline = Spline->FindLocationClosestToWorldLocation(ControlledPawn->GetActorLocation(), ESplineCoordinateSpace::World);
 		const FVector Direction = Spline->FindDirectionClosestToWorldLocation(LocationOnSpline, ESplineCoordinateSpace::World);
@@ -108,6 +113,26 @@ void ALabyrinthPlayerController::AutoRun()
 			bAutoRunning = false;
 		}
 	}
+}
+
+void ALabyrinthPlayerController::FaceMouseCursor()
+{
+	if (!bShouldFaceMouseCursor) return;
+	if (!IsValid(ControlledPawn)) ControlledPawn = Cast<ALabyrinthCharacter>( GetPawn<APawn>() );
+	if (!IsValid(ControlledPawn)) return;
+
+	FVector MouseLocation, MouseDirection;
+	DeprojectMousePositionToWorld(MouseLocation, MouseDirection);
+
+	FVector CharacterLocation = ControlledPawn->GetActorLocation();
+
+	FHitResult HitResult;
+	GetHitResultUnderCursorByChannel(TraceTypeQuery1, false, HitResult);
+	FVector Direction = HitResult.ImpactPoint - CharacterLocation;
+	CharacterRotation = UKismetMathLibrary::FindLookAtRotation(FVector(0,0,0), Direction);
+	CharacterRotation.Pitch = ControlledPawn->GetActorRotation().Pitch;
+	CharacterRotation.Roll = ControlledPawn->GetActorRotation().Roll;
+	ControlledPawn->SetCharacterPawnRotation(CharacterRotation);
 }
 
 void ALabyrinthPlayerController::HighlightActor(AActor* InActor)
@@ -197,7 +222,7 @@ void ALabyrinthPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 	
 	if (TargetingStatus != ETargetingStatus::TargetingEnemy && !bShiftKeyDown)
 	{
-		const APawn* ControlledPawn = GetPawn();
+		//const APawn* ControlledPawn = GetPawn();
 		if (FollowTime <= ShortPressThreshold && ControlledPawn)
 		{
 			if (IsValid(ThisActor) && ThisActor->Implements<UHighlightInterface>())
@@ -248,7 +273,7 @@ void ALabyrinthPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 		FollowTime += GetWorld()->GetDeltaSeconds();
 		if (CursorHit.bBlockingHit) CachedDestination = CursorHit.ImpactPoint;
 
-		if (APawn* ControlledPawn = GetPawn())
+		if (IsValid(ControlledPawn))
 		{
 			const FVector WorldDirection = (CachedDestination - ControlledPawn->GetActorLocation()).GetSafeNormal();
 			ControlledPawn->AddMovementInput(WorldDirection);
