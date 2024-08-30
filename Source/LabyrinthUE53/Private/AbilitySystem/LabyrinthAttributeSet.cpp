@@ -5,6 +5,7 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "GameplayEffectExtension.h"
+#include "LabyrinthAbilityTypes.h"
 #include "Net/UnrealNetwork.h"
 #include "LabyrinthGameplayTags.h"
 #include "AbilitySystem/LabyrinthAbilitySystemLibrary.h"
@@ -391,7 +392,7 @@ void ULabyrinthAttributeSet::HandleIncomingDamage(const FEffectProperties& Props
 			if (CombatInterface)
 			{
 				FVector Impulse = ULabyrinthAbilitySystemLibrary::GetDeathImpulse(Props.EffectContextHandle);
-				//CombatInterface->Die(ULabyrinthAbilitySystemLibrary::GetDeathImpulse(Props.EffectContextHandle));
+				CombatInterface->Die(ULabyrinthAbilitySystemLibrary::GetDeathImpulse(Props.EffectContextHandle));
 			}
 			SendXPEvent(Props);
 			
@@ -500,14 +501,14 @@ void ULabyrinthAttributeSet::Debuff(const FEffectProperties& Props)
 	ModifierInfo.ModifierOp = EGameplayModOp::Additive;
 	ModifierInfo.Attribute = ULabyrinthAttributeSet::GetIncomingDamageAttribute();
 	
-	// if (FGameplayEffectSpec* MutableSpec = new FGameplayEffectSpec(Effect, EffectContext, 1.f))
-	// {
-	// 	FLabyrinthGameplayEffectContext* AuraContext = static_cast<FAuraGameplayEffectContext*>(MutableSpec->GetContext().Get());
-	// 	TSharedPtr<FGameplayTag> DebuffDamageType = MakeShareable(new FGameplayTag(DamageType));
-	// 	AuraContext->SetDamageType(DebuffDamageType);
-	//
-	// 	Props.TargetASC->ApplyGameplayEffectSpecToSelf(*MutableSpec);
-	// }
+	if (FGameplayEffectSpec* MutableSpec = new FGameplayEffectSpec(Effect, EffectContext, 1.f))
+	{
+		FLabyrinthGameplayEffectContext* AuraContext = static_cast<FLabyrinthGameplayEffectContext*>(MutableSpec->GetContext().Get());
+		TSharedPtr<FGameplayTag> DebuffDamageType = MakeShareable(new FGameplayTag(DamageType));
+		AuraContext->SetDamageType(DebuffDamageType);
+	
+		Props.TargetASC->ApplyGameplayEffectSpecToSelf(*MutableSpec);
+	}
 }
 
 void ULabyrinthAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData& Data,
