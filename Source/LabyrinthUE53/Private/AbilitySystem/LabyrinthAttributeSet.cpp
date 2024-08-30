@@ -399,12 +399,12 @@ void ULabyrinthAttributeSet::HandleIncomingDamage(const FEffectProperties& Props
 		}
 		else
 		{
-			// if (Props.TargetCharacter->Implements<UCombatInterface>() && !ICombatInterface::Execute_IsBeingShocked(Props.TargetCharacter))
-			// {
-			// 	FGameplayTagContainer TagContainer;
-			// 	TagContainer.AddTag(FLabyrinthGameplayTags::Get().Effects_HitReact);
-			// 	Props.TargetASC->TryActivateAbilitiesByTag(TagContainer);
-			// }
+			if (Props.TargetCharacter->Implements<UCombatInterface>() && !ICombatInterface::Execute_IsBeingShocked(Props.TargetCharacter))
+			{
+				FGameplayTagContainer TagContainer;
+				TagContainer.AddTag(FLabyrinthGameplayTags::Get().Effects_HitReact);
+				Props.TargetASC->TryActivateAbilitiesByTag(TagContainer);
+			}
 			
 			const FVector& KnockbackForce = ULabyrinthAbilitySystemLibrary::GetKnockbackForce(Props.EffectContextHandle);
 			if (!KnockbackForce.IsNearlyZero(1.f))

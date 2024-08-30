@@ -203,7 +203,7 @@ void ALabyrinthCharacter::InitAbilityActorInfo()
 	AbilitySystemComponent = LabyrinthPlayerState->GetAbilitySystemComponent();
 	AttributeSet = LabyrinthPlayerState->GetAttributeSet();
 	OnAscRegistered.Broadcast(AbilitySystemComponent);
-	//AbilitySystemComponent->RegisterGameplayTagEvent(FLabyrinthGameplayTags::Get().Debuff_Stun, EGameplayTagEventType::NewOrRemoved).AddUObject(this, &ALabyrinthCharacter::StunTagChanged);
+	AbilitySystemComponent->RegisterGameplayTagEvent(FLabyrinthGameplayTags::Get().Debuff_Stun, EGameplayTagEventType::NewOrRemoved).AddUObject(this, &ALabyrinthCharacter::StunTagChanged);
 
 	if (ALabyrinthPlayerController* AuraPlayerController = Cast<ALabyrinthPlayerController>(GetController()))
 	{

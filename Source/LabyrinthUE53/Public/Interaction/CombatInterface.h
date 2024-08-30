@@ -34,7 +34,7 @@ struct FTaggedMontage
 };
 
 // This class does not need to be modified.
-UINTERFACE(MinimalAPI)
+UINTERFACE(MinimalAPI, BlueprintType)
 class UCombatInterface : public UInterface
 {
 	GENERATED_BODY()
@@ -92,15 +92,15 @@ public:
 	
 	virtual FOnASCRegistered& GetOnASCRegisteredDelegate() = 0;
 	
-	// UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	// void SetInShockLoop(bool bInLoop);
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void SetInShockLoop(bool bInLoop);
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	USkeletalMeshComponent* GetWeapon();
 	
-	// UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	// bool IsBeingShocked() const;
-	//
-	// UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	// void SetIsBeingShocked(bool bInShock);
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	bool IsBeingShocked() const;
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void SetIsBeingShocked(bool bInShock);
 };

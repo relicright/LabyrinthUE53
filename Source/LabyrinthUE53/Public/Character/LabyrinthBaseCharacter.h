@@ -47,8 +47,8 @@ public:
 	virtual UNiagaraSystem* GetBloodEffect_Implementation() override;
 	virtual void IncremenetMinionCount_Implementation(int32 Amount) override;
 	virtual FOnASCRegistered& GetOnASCRegisteredDelegate() override;
-	//virtual void SetIsBeingShocked_Implementation(bool bInShock) override;
-	//virtual bool IsBeingShocked_Implementation() const override;
+	virtual void SetIsBeingShocked_Implementation(bool bInShock) override;
+	virtual bool IsBeingShocked_Implementation() const override;
 	virtual FOnDamageSignature& GetOnDamageSignature() override;
 	/** end Combat Interface */
 	
@@ -59,6 +59,21 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	TArray<FTaggedMontage> AttackMontages;
 
+	UPROPERTY(ReplicatedUsing=OnRep_Stunned, BlueprintReadOnly)
+	bool bIsStunned = false;
+
+	UPROPERTY(ReplicatedUsing=OnRep_Burned, BlueprintReadOnly)
+	bool bIsBurned = false;
+
+	UPROPERTY(Replicated, BlueprintReadOnly)
+	bool bIsBeingShocked = false;
+	
+	UFUNCTION()
+	virtual void OnRep_Stunned();
+
+	UFUNCTION()
+	virtual void OnRep_Burned();
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Combat")
 	UNiagaraSystem* BloodEffect;
 
@@ -97,6 +112,8 @@ protected:
 	
 	UPROPERTY(BlueprintReadOnly)
 	bool bDead = false;
+	
+	virtual void StunTagChanged(const FGameplayTag CallbackTag, int32 NewCount);
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Combat")
 	float BaseWalkSpeed = 600.f;

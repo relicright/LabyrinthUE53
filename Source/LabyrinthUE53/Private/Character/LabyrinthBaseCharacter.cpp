@@ -8,7 +8,9 @@
 #include "LabyrinthGameplayTags.h"
 #include "AbilitySystem/LabyrinthAbilitySystemComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "LabyrinthUE53/LabyrinthUE53.h"
+#include "Net/UnrealNetwork.h"
 
 ALabyrinthBaseCharacter::ALabyrinthBaseCharacter()
 {
@@ -31,6 +33,12 @@ void ALabyrinthBaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+}
+
+void ALabyrinthBaseCharacter::StunTagChanged(const FGameplayTag CallbackTag, int32 NewCount)
+{
+	bIsStunned = NewCount > 0;
+	GetCharacterMovement()->MaxWalkSpeed = bIsStunned ? 0.f : BaseWalkSpeed;
 }
 
 void ALabyrinthBaseCharacter::InitAbilityActorInfo()
@@ -76,6 +84,8 @@ void ALabyrinthBaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimePropert
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	//TODO: Add in all of the rep lifetime defaults every character will have.
+	DOREPLIFETIME(ALabyrinthBaseCharacter, bIsStunned);
+	DOREPLIFETIME(ALabyrinthBaseCharacter, bIsBurned);
 }
 
 float ALabyrinthBaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
@@ -166,6 +176,14 @@ FOnDamageSignature& ALabyrinthBaseCharacter::GetOnDamageSignature()
 	return OnDamageDelegate;
 }
 
+void ALabyrinthBaseCharacter::OnRep_Stunned()
+{
+}
+
+void ALabyrinthBaseCharacter::OnRep_Burned()
+{
+}
+
 int32 ALabyrinthBaseCharacter::GetMinionCount_Implementation()
 {
 	return MinionCount;
@@ -189,5 +207,15 @@ void ALabyrinthBaseCharacter::IncremenetMinionCount_Implementation(int32 Amount)
 FOnASCRegistered& ALabyrinthBaseCharacter::GetOnASCRegisteredDelegate()
 {
 	return OnAscRegistered;
+}
+
+void ALabyrinthBaseCharacter::SetIsBeingShocked_Implementation(bool bInShock)
+{
+	bIsBeingShocked = bInShock;
+}
+
+bool ALabyrinthBaseCharacter::IsBeingShocked_Implementation() const
+{
+	return bIsBeingShocked;
 }
 
