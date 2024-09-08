@@ -9,6 +9,7 @@
 
 class UCameraComponent;
 class USpringArmComponent;
+struct FGameplayAttribute;
 
 /**
  * 
@@ -27,6 +28,7 @@ public:
 	virtual void AddToXP_Implementation(int32 InXP) override;
 	virtual void LevelUp_Implementation() override;
 	virtual int32 GetXP_Implementation() const override;
+	virtual void AddXPToAttribute_Implementation(FGameplayTag Tag, int32 InXP) const override;
 	virtual int32 FindLevelForXP_Implementation(int32 InXP) const override;
 	virtual int32 GetAttributePointsReward_Implementation(int32 Level) const override;
 	virtual int32 GetSpellPointsReward_Implementation(int32 Level) const override;
@@ -41,6 +43,11 @@ public:
 	virtual int32 GetPlayerLevel_Implementation() override;
 	virtual void Die(const FVector& DeathImpulse) override;
 	/** end Combat Interface */
+	
+	UPROPERTY(EditDefaultsOnly)
+	float DeathTime = 5.f;
+
+	FTimerHandle DeathTimer;
 
 	void SetCharacterPawnRotation(FRotator NewRotation);
 	
@@ -52,6 +59,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="Character")
 	void SetShouldFaceMouseCursor(bool bShouldFace);
+
+protected:
 	
 private:
 	UPROPERTY(VisibleAnywhere)

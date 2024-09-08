@@ -9,6 +9,7 @@
 #include "AbilitySystem/LabyrinthAbilitySystemComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "LabyrinthUE53/LabyrinthUE53.h"
 #include "Net/UnrealNetwork.h"
 
@@ -86,6 +87,7 @@ void ALabyrinthBaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimePropert
 	//TODO: Add in all of the rep lifetime defaults every character will have.
 	DOREPLIFETIME(ALabyrinthBaseCharacter, bIsStunned);
 	DOREPLIFETIME(ALabyrinthBaseCharacter, bIsBurned);
+	DOREPLIFETIME(ALabyrinthBaseCharacter, bIsBeingShocked);
 }
 
 float ALabyrinthBaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
@@ -150,20 +152,33 @@ FTaggedMontage ALabyrinthBaseCharacter::GetTaggedMontageByTag_Implementation(con
 	return FTaggedMontage();
 }
 
-ECharacterClass ALabyrinthBaseCharacter::GetCharacterClass_Implementation()
-{
-	return CharacterClass;
-}
-
-USkeletalMeshComponent* ALabyrinthBaseCharacter::GetWeapon_Implementation()
-{
-	return Weapon;
-}
-
 void ALabyrinthBaseCharacter::Die(const FVector& DeathImpulse)
 {
-	// Weapon->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld, true));
-	// MulticastHandleDeath(DeathImpulse);
+	Weapon->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld, true));
+	MulticastHandleDeath(DeathImpulse);
+}
+
+void ALabyrinthBaseCharacter::MulticastHandleDeath_Implementation(const FVector& DeathImpulse)
+{
+	UGameplayStatics::PlaySoundAtLocation(this, DeathSound, GetActorLocation(), GetActorRotation());
+	
+	Weapon->SetSimulatePhysics(true);
+	Weapon->SetEnableGravity(true);
+	Weapon->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+	Weapon->AddImpulse(DeathImpulse * 0.1f, NAME_None, true);
+	
+	GetMesh()->SetSimulatePhysics(true);
+	GetMesh()->SetEnableGravity(true);
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+	GetMesh()->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Block);
+	GetMesh()->AddImpulse(DeathImpulse, NAME_None, true);
+	
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	//Dissolve();
+	bDead = true;
+	//BurnDebuffComponent->Deactivate();
+	//StunDebuffComponent->Deactivate();
+	OnDeathDelegate.Broadcast(this);
 }
 
 FOnDeathSignature& ALabyrinthBaseCharacter::GetOnDeathDelegate()
@@ -174,6 +189,16 @@ FOnDeathSignature& ALabyrinthBaseCharacter::GetOnDeathDelegate()
 FOnDamageSignature& ALabyrinthBaseCharacter::GetOnDamageSignature()
 {
 	return OnDamageDelegate;
+}
+
+ECharacterClass ALabyrinthBaseCharacter::GetCharacterClass_Implementation()
+{
+	return CharacterClass;
+}
+
+USkeletalMeshComponent* ALabyrinthBaseCharacter::GetWeapon_Implementation()
+{
+	return Weapon;
 }
 
 void ALabyrinthBaseCharacter::OnRep_Stunned()
@@ -191,7 +216,7 @@ int32 ALabyrinthBaseCharacter::GetMinionCount_Implementation()
 
 bool ALabyrinthBaseCharacter::IsDead_Implementation() const
 {
-	return IsDead();
+	return bDead;
 }
 
 UNiagaraSystem* ALabyrinthBaseCharacter::GetBloodEffect_Implementation()

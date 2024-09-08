@@ -6,7 +6,9 @@
 #include "AbilitySystemComponent.h"
 #include "LabyrinthGameplayTags.h"
 #include "AbilitySystem/LabyrinthAbilitySystemComponent.h"
+#include "AbilitySystem/LabyrinthAttributeSet.h"
 #include "Camera/CameraComponent.h"
+#include "Game/LabyrinthGameModeBase.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -66,6 +68,7 @@ void ALabyrinthCharacter::OnRep_PlayerState()
 
 void ALabyrinthCharacter::AddToXP_Implementation(int32 InXP)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Incoming XP2 Character: %d"), InXP);
 	ALabyrinthPlayerState* LabyrinthPlayerState = GetPlayerState<ALabyrinthPlayerState>();
 	check(LabyrinthPlayerState);
 	LabyrinthPlayerState->AddToXP(InXP);
@@ -81,6 +84,13 @@ int32 ALabyrinthCharacter::GetXP_Implementation() const
 	const ALabyrinthPlayerState* LabyrinthPlayerState = GetPlayerState<ALabyrinthPlayerState>();
 	check(LabyrinthPlayerState);
 	return LabyrinthPlayerState->GetXP();
+}
+
+void ALabyrinthCharacter::AddXPToAttribute_Implementation(FGameplayTag Tag, int32 InXP) const
+{
+	ALabyrinthPlayerState* LabyrinthPlayerState = GetPlayerState<ALabyrinthPlayerState>();
+	check(LabyrinthPlayerState);
+	LabyrinthPlayerState->AddXPToAttribute(Tag, InXP);
 }
 
 int32 ALabyrinthCharacter::FindLevelForXP_Implementation(int32 InXP) const
@@ -115,7 +125,7 @@ void ALabyrinthCharacter::AddToPlayerLevel_Implementation(int32 InPlayerLevel)
 
 	if (ULabyrinthAbilitySystemComponent* AuraASC = Cast<ULabyrinthAbilitySystemComponent>(GetAbilitySystemComponent()))
 	{
-		//AuraASC->UpdateAbilityStatuses(AuraPlayerState->GetPlayerLevel());
+		//AuraASC->UpdateAbilityStatuses(LabyrinthPlayerState->GetPlayerLevel());
 	}
 }
 
@@ -158,17 +168,17 @@ void ALabyrinthCharacter::Die(const FVector& DeathImpulse)
 {
 	Super::Die(DeathImpulse);
 
-	// FTimerDelegate DeathTimerDelegate;
-	// DeathTimerDelegate.BindLambda([this]()
-	// {
-	// 	ALabyrinthGameModeBase* AuraGM = Cast<ALabyrinthGameModeBase>(UGameplayStatics::GetGameMode(this));
-	// 	if (AuraGM)
-	// 	{
-	// 		AuraGM->PlayerDied(this);
-	// 	}
-	// });
-	// GetWorldTimerManager().SetTimer(DeathTimer, DeathTimerDelegate, DeathTime, false);
-	// TopDownCameraComponent->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+	FTimerDelegate DeathTimerDelegate;
+	DeathTimerDelegate.BindLambda([this]()
+	{
+		ALabyrinthGameModeBase* AuraGM = Cast<ALabyrinthGameModeBase>(UGameplayStatics::GetGameMode(this));
+		if (AuraGM)
+		{
+			AuraGM->PlayerDied(this);
+		}
+	});
+	GetWorldTimerManager().SetTimer(DeathTimer, DeathTimerDelegate, DeathTime, false);
+	TopDownCameraComponent->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
 }
 
 void ALabyrinthCharacter::SetCharacterPawnRotation(FRotator NewRotation)

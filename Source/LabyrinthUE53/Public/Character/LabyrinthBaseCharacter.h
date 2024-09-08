@@ -90,6 +90,9 @@ public:
 	void SetCharacterClass(ECharacterClass InClass) { CharacterClass = InClass; }
 
 	void ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass, float Level) const;
+
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void MulticastHandleDeath(const FVector& DeathImpulse);
 	
 protected:
 

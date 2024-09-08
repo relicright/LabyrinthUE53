@@ -6,6 +6,7 @@
 #include "AbilitySystemComponent.h"
 #include "AbilitySystem/LabyrinthAbilitySystemComponent.h"
 #include "AbilitySystem/LabyrinthAttributeSet.h"
+#include "Net/UnrealNetwork.h"
 
 ALabyrinthPlayerState::ALabyrinthPlayerState()
 {
@@ -21,6 +22,11 @@ ALabyrinthPlayerState::ALabyrinthPlayerState()
 void ALabyrinthPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ALabyrinthPlayerState, XP);
+	DOREPLIFETIME(ALabyrinthPlayerState, Level);
+	DOREPLIFETIME(ALabyrinthPlayerState, AttributePoints);
+	DOREPLIFETIME(ALabyrinthPlayerState, SpellPoints);
 }
 
 UAbilitySystemComponent* ALabyrinthPlayerState::GetAbilitySystemComponent() const
@@ -31,7 +37,32 @@ UAbilitySystemComponent* ALabyrinthPlayerState::GetAbilitySystemComponent() cons
 void ALabyrinthPlayerState::AddToXP(int32 InXP)
 {
 	XP += InXP;
+	UE_LOG(LogTemp, Warning, TEXT("XP GAIN: PLAYER STATE: %d"), InXP);
+	UE_LOG(LogTemp, Warning, TEXT("Total XP GAIN: PLAYER STATE: %d"), XP);
 	OnXPChangedDelegate.Broadcast(XP);
+}
+
+void ALabyrinthPlayerState::AddXPToAttribute(FGameplayTag Tag, int32 InXP)
+{
+	UE_LOG(LogTemp, Warning, TEXT("PlayerState: AddXP to att: %s:%d"), *Tag.ToString(), InXP);
+	
+	if (AttributeXP.Contains(Tag))
+	{
+		AttributeXP[Tag] += InXP;
+	}
+	else
+	{
+		AttributeXP.Emplace(Tag, InXP);
+	}
+
+	// Check if the current XP is enough to level the skill up
+	const UCharacterClassInfo* CharacterClassInfo = UAuraAbilitySystemLibrary::GetCharacterClassInfo(SourceAvatar);
+	const FRealCurve* ArmorPenetrationCurve = CharacterClassInfo->DamageCalculationCoefficients->FindCurve(FName("ArmorPenetration"), FString());
+	const float ArmorPenetrationCoefficient = ArmorPenetrationCurve->Eval(SourcePlayerLevel);
+
+		// If so set all of the XP for this attribute to 0
+	
+	OnXPToAttributeChangedDelegate.Broadcast(InXP);
 }
 
 void ALabyrinthPlayerState::AddToLevel(int32 InLevel)
