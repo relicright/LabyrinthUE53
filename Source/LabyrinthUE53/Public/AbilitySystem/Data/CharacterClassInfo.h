@@ -34,7 +34,7 @@ struct FCharacterClassDefaultInfo
 	UPROPERTY(EditDefaultsOnly, Category = "Class Defaults")
 	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Class Defaults")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Class Defaults")
 	FScalableFloat XPReward = FScalableFloat();
 };
 
@@ -74,5 +74,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Common Class Defaults|Damage")
 	TObjectPtr<UCurveTable> DamageCalculationCoefficients;
 
+	UFUNCTION(BlueprintCallable)
 	FCharacterClassDefaultInfo GetClassDefaultInfo(ECharacterClass CharacterClass);
 };

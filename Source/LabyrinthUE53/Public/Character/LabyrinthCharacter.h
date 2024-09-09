@@ -29,6 +29,11 @@ public:
 	virtual void LevelUp_Implementation() override;
 	virtual int32 GetXP_Implementation() const override;
 	virtual void AddXPToAttribute_Implementation(FGameplayTag Tag, int32 InXP) const override;
+	virtual FGameplayTag GetLastSkillUsed_Implementation() override;
+	
+	UFUNCTION(BlueprintCallable)
+	virtual void SetLastSkillUsed_Implementation(FGameplayTag LastUsedSkillTag) override;
+	
 	virtual int32 FindLevelForXP_Implementation(int32 InXP) const override;
 	virtual int32 GetAttributePointsReward_Implementation(int32 Level) const override;
 	virtual int32 GetSpellPointsReward_Implementation(int32 Level) const override;
@@ -61,7 +66,7 @@ public:
 	void SetShouldFaceMouseCursor(bool bShouldFace);
 
 protected:
-	
+
 private:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UCameraComponent> TopDownCameraComponent;

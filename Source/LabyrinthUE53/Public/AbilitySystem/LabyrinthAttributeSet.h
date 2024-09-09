@@ -13,7 +13,7 @@ GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
 GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
-USTRUCT()
+USTRUCT(BlueprintType)
 struct FEffectProperties
 {
 	GENERATED_BODY()
@@ -70,7 +70,10 @@ public:
 	virtual void PostAttributeChange(const FGameplayAttribute& Attribute, float OldValue, float NewValue) override;
 
 	TMap<FGameplayTag, TStaticFuncPtr<FGameplayAttribute()>> TagsToAttributes;
-	
+
+	UFUNCTION(BlueprintCallable)
+	void SendXPEvent(const FEffectProperties& Props);
+
 	/*
 	 * Primary Attributes
 	 */
@@ -388,7 +391,7 @@ private:
 	void Debuff(const FEffectProperties& Props);
 	void SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const;
 	void ShowFloatingText(const FEffectProperties& Props, float Damage, bool bBlockedHit, bool bCriticalHit) const;
-	void SendXPEvent(const FEffectProperties& Props);
+
 	bool bTopOffHealth = false;
 	bool bTopOffMana = false;
 };

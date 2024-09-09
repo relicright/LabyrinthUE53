@@ -104,6 +104,11 @@ void FLabyrinthGameplayTags::InitializeNativeGameplayTags()
 	* Primary Skill Attributes
 	*/
 
+	GameplayTags.Attributes_PrimarySkill = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.PrimarySkill"),
+		FString("Magical Casting Abilities")
+		);
+
 	GameplayTags.Attributes_PrimarySkill_Arcanist = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Attributes.PrimarySkill.Arcanist"),
 		FString("Magical Casting Abilities")

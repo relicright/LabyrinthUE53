@@ -15,6 +15,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Player/LabyrinthPlayerState.h"
 #include "LabyrinthUE53/Public/Interaction/CombatInterface.h"
+#include "Net/UnrealNetwork.h"
 #include "Player/LabyrinthPlayerController.h"
 
 ALabyrinthCharacter::ALabyrinthCharacter()
@@ -91,6 +92,20 @@ void ALabyrinthCharacter::AddXPToAttribute_Implementation(FGameplayTag Tag, int3
 	ALabyrinthPlayerState* LabyrinthPlayerState = GetPlayerState<ALabyrinthPlayerState>();
 	check(LabyrinthPlayerState);
 	LabyrinthPlayerState->AddXPToAttribute(Tag, InXP);
+}
+
+FGameplayTag ALabyrinthCharacter::GetLastSkillUsed_Implementation()
+{
+	ALabyrinthPlayerState* LabyrinthPlayerState = GetPlayerState<ALabyrinthPlayerState>();
+	check(LabyrinthPlayerState);
+	return LabyrinthPlayerState->GetLastSkillUsed();
+}
+
+void ALabyrinthCharacter::SetLastSkillUsed_Implementation(FGameplayTag LastUsedSkillTag)
+{
+	ALabyrinthPlayerState* LabyrinthPlayerState = GetPlayerState<ALabyrinthPlayerState>();
+	check(LabyrinthPlayerState);
+	return LabyrinthPlayerState->SetLastUsedSkill(LastUsedSkillTag);
 }
 
 int32 ALabyrinthCharacter::FindLevelForXP_Implementation(int32 InXP) const

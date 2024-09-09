@@ -44,6 +44,7 @@ public:
 	FORCEINLINE int32 GetXP() const { return XP; }
 	FORCEINLINE int32 GetAttributePoints() const { return AttributePoints; }
 	FORCEINLINE int32 GetSpellPoints() const { return SpellPoints; }
+	FORCEINLINE FGameplayTag GetLastSkillUsed() const { return LastSkillUsed; }
 
 	void AddToXP(int32 InXP);
 	void AddXPToAttribute(FGameplayTag Tag, int32 InXP);
@@ -55,6 +56,7 @@ public:
 	void SetLevel(int32 InLevel);
 	void SetAttributePoints(int32 InPoints);
 	void SetSpellPoints(int32 InPoints);
+	void SetLastUsedSkill(FGameplayTag LastUsedSkillTag);
 
 protected:
 	
@@ -67,6 +69,11 @@ protected:
 	UPROPERTY()
 	TMap<FGameplayTag, int32> AttributeXP;
 
+	UPROPERTY(ReplicatedUsing=OnRep_LastSkillUsed)
+	FGameplayTag LastSkillUsed = FGameplayTag();
+
+	UFUNCTION()
+	void OnRep_LastSkillUsed(FGameplayTag OldLastSkillUsed);
 
 private:
 

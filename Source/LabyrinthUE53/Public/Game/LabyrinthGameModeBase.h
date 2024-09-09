@@ -6,6 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "LabyrinthGameModeBase.generated.h"
 
+class UAttributeXPLevelInfo;
 class UAbilityInfo;
 class UCharacterClassInfo;
 
@@ -20,6 +21,9 @@ class LABYRINTHUE53_API ALabyrinthGameModeBase : public AGameModeBase
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "Character Class Defaults")
 	TObjectPtr<UCharacterClassInfo> CharacterClassInfo;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Character Class Defaults")
+	TObjectPtr<UAttributeXPLevelInfo> AttributeXPLevelInfo;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Ability Info")
 	TObjectPtr<UAbilityInfo> AbilityInfo;

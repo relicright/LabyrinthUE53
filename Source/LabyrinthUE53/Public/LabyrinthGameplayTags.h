@@ -33,6 +33,7 @@ public:
 	FGameplayTag Attributes_Secondary_MaxMana;
 	FGameplayTag Attributes_Secondary_MaxStamina;
 
+	FGameplayTag Attributes_PrimarySkill;
 	FGameplayTag Attributes_PrimarySkill_Arcanist;
 	FGameplayTag Attributes_PrimarySkill_Religion;
 	FGameplayTag Attributes_PrimarySkill_Martial;

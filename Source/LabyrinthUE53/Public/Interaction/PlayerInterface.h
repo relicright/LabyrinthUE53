@@ -31,6 +31,12 @@ public:
 	void AddXPToAttribute(FGameplayTag Tag, int32 InXP) const;
 
 	UFUNCTION(BlueprintNativeEvent)
+	FGameplayTag GetLastSkillUsed();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void SetLastSkillUsed(FGameplayTag LastUsedSkillTag);
+	
+	UFUNCTION(BlueprintNativeEvent)
 	int32 GetXP() const;
 	
 	UFUNCTION(BlueprintNativeEvent)

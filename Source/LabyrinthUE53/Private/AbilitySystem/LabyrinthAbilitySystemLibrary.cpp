@@ -197,6 +197,13 @@ UCharacterClassInfo* ULabyrinthAbilitySystemLibrary::GetCharacterClassInfo(const
 	return LabyrinthGameMode->CharacterClassInfo;
 }
 
+UAttributeXPLevelInfo* ULabyrinthAbilitySystemLibrary::GetAttributeSkillXPInfo(const UObject* WorldContextObject)
+{
+	const ALabyrinthGameModeBase* LabyrinthGameMode = Cast<ALabyrinthGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
+	if (LabyrinthGameMode == nullptr) return nullptr;
+	return LabyrinthGameMode->AttributeXPLevelInfo;
+}
+
 UAbilityInfo* ULabyrinthAbilitySystemLibrary::GetAbilityInfo(const UObject* WorldContextObject)
 {
 	const ALabyrinthGameModeBase* AuraGameMode = Cast<ALabyrinthGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));

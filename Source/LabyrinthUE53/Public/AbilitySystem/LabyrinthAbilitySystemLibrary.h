@@ -8,6 +8,7 @@
 #include "Data/CharacterClassInfo.h"
 #include "LabyrinthAbilitySystemLibrary.generated.h"
 
+class UAttributeXPLevelInfo;
 class UAbilityInfo;
 class UAbilitySystemComponent;
 
@@ -52,6 +53,9 @@ class LABYRINTHUE53_API ULabyrinthAbilitySystemLibrary : public UBlueprintFuncti
 
 	UFUNCTION(BlueprintCallable, Category="AuraAbilitySystemLibrary|CharacterClassDefaults")
 	static UCharacterClassInfo* GetCharacterClassInfo(const UObject* WorldContextObject);
+
+	UFUNCTION(BlueprintCallable, Category="AuraAbilitySystemLibrary|SkillLevelUpDefaults")
+	static UAttributeXPLevelInfo* GetAttributeSkillXPInfo(const UObject* WorldContextObject);
 
 	UFUNCTION(BlueprintCallable, Category="AuraAbilitySystemLibrary|CharacterClassDefaults")
 	static UAbilityInfo* GetAbilityInfo(const UObject* WorldContextObject);

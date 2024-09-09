@@ -193,8 +193,6 @@ void ULabyrinthAttributeSet::PostAttributeChange(const FGameplayAttribute& Attri
 	}
 }
 
-
-
 void ULabyrinthAttributeSet::HandleIncomingDamage(const FEffectProperties& Props)
 {
 	const float LocalIncomingDamage = GetIncomingDamage();
@@ -256,6 +254,7 @@ void ULabyrinthAttributeSet::HandleIncomingXP(const FEffectProperties& Props)
 		const int32 NewLevel = IPlayerInterface::Execute_FindLevelForXP(Props.SourceCharacter, CurrentXP + LocalIncomingXP);
 		const int32 NumLevelUps = NewLevel - CurrentLevel;
 
+		// TODO: This should all be re-written to handle level ups for different skills as well as the overall player level.
 		if (NumLevelUps > 0)
 		{
 			IPlayerInterface::Execute_AddToPlayerLevel(Props.SourceCharacter, NumLevelUps);
@@ -280,8 +279,11 @@ void ULabyrinthAttributeSet::HandleIncomingXP(const FEffectProperties& Props)
 		
 		IPlayerInterface::Execute_AddToXP(Props.SourceCharacter, LocalIncomingXP);
 
-		const FLabyrinthGameplayTags& GameplayTags = FLabyrinthGameplayTags::Get();
-		IPlayerInterface::Execute_AddXPToAttribute(Props.SourceCharacter, GameplayTags.Attributes_PrimarySkill_Alchemist, LocalIncomingXP);
+		// TODO: Need to add an event to the ListenForEvent gameplay effect.  It should listen for tags with Attribute.Skill or the equivalent.
+		// There should be a way to add xp when gameplay abilities are used and hit a target.  This will prevent needing to kill a target to gain skills.
+		FGameplayTag LastSkill = IPlayerInterface::Execute_GetLastSkillUsed(Props.SourceCharacter);
+		if (LastSkill != FGameplayTag())
+			IPlayerInterface::Execute_AddXPToAttribute(Props.SourceCharacter, LastSkill, LocalIncomingXP);
 	}
 }
 

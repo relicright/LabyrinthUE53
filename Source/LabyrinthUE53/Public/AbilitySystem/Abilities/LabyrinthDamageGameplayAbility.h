@@ -72,6 +72,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Damage")
 	float RadialDamageOuterRadius = 0.f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category= "Damage")
+	FGameplayTag AttributeSkillTag = FGameplayTag();
 	
 	UFUNCTION(BlueprintPure)
 	FTaggedMontage GetRandomTaggedMontageFromArray(const TArray<FTaggedMontage>& TaggedMontages) const;

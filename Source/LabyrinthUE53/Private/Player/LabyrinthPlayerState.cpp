@@ -2,10 +2,11 @@
 
 
 #include "Player/LabyrinthPlayerState.h"
-
 #include "AbilitySystemComponent.h"
 #include "AbilitySystem/LabyrinthAbilitySystemComponent.h"
+#include "AbilitySystem/LabyrinthAbilitySystemLibrary.h"
 #include "AbilitySystem/LabyrinthAttributeSet.h"
+#include "AbilitySystem/Data/AttributeXPLevelInfo.h"
 #include "Net/UnrealNetwork.h"
 
 ALabyrinthPlayerState::ALabyrinthPlayerState()
@@ -27,6 +28,7 @@ void ALabyrinthPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 	DOREPLIFETIME(ALabyrinthPlayerState, Level);
 	DOREPLIFETIME(ALabyrinthPlayerState, AttributePoints);
 	DOREPLIFETIME(ALabyrinthPlayerState, SpellPoints);
+	DOREPLIFETIME(ALabyrinthPlayerState, LastSkillUsed);
 }
 
 UAbilitySystemComponent* ALabyrinthPlayerState::GetAbilitySystemComponent() const
@@ -37,8 +39,6 @@ UAbilitySystemComponent* ALabyrinthPlayerState::GetAbilitySystemComponent() cons
 void ALabyrinthPlayerState::AddToXP(int32 InXP)
 {
 	XP += InXP;
-	UE_LOG(LogTemp, Warning, TEXT("XP GAIN: PLAYER STATE: %d"), InXP);
-	UE_LOG(LogTemp, Warning, TEXT("Total XP GAIN: PLAYER STATE: %d"), XP);
 	OnXPChangedDelegate.Broadcast(XP);
 }
 
@@ -56,11 +56,26 @@ void ALabyrinthPlayerState::AddXPToAttribute(FGameplayTag Tag, int32 InXP)
 	}
 
 	// Check if the current XP is enough to level the skill up
-	const UCharacterClassInfo* CharacterClassInfo = UAuraAbilitySystemLibrary::GetCharacterClassInfo(SourceAvatar);
-	const FRealCurve* ArmorPenetrationCurve = CharacterClassInfo->DamageCalculationCoefficients->FindCurve(FName("ArmorPenetration"), FString());
-	const float ArmorPenetrationCoefficient = ArmorPenetrationCurve->Eval(SourcePlayerLevel);
+	const UAttributeXPLevelInfo* AttributeLevelInfo = ULabyrinthAbilitySystemLibrary::GetAttributeSkillXPInfo(GetAbilitySystemComponent()->GetAvatarActor());
+	const FRealCurve* LevelUpCurve = AttributeLevelInfo->AttributeSkillXPRequirements->FindCurve(*Tag.ToString(), FString());
+	const float CurrentXP = AttributeXP[Tag];
+	UE_LOG(LogTemp, Warning, TEXT("PlayerState: CurrentXP: %f"), CurrentXP);
 
-		// If so set all of the XP for this attribute to 0
+	ULabyrinthAttributeSet* LabyrinthAttSet = Cast<ULabyrinthAttributeSet>(AttributeSet);
+	TStaticFuncPtr<FGameplayAttribute()> InAttribute = LabyrinthAttSet->TagsToAttributes[Tag];
+	const float CurrentSkill = InAttribute().GetNumericValue(LabyrinthAttSet);
+	//const float CurrentSkill = LabyrinthAttSet->GetValueFromAttribute(LabyrinthAttSet->TagsToAttributes[Tag]);
+	UE_LOG(LogTemp, Warning, TEXT("PlayerState: CurrentSkill: %f"), CurrentSkill);
+	
+	const float LevelUpCoefficient = LevelUpCurve->Eval(CurrentSkill);
+	UE_LOG(LogTemp, Warning, TEXT("PlayerState: LevelUpCoefficient: %f"), LevelUpCoefficient);
+
+	// If so set all of the XP for this attribute to 0
+	if (CurrentXP > LevelUpCoefficient)
+	{
+		AttributeXP[Tag] = 0;
+		GetAbilitySystemComponent()->SetNumericAttributeBase(InAttribute(), CurrentSkill + 1);
+	}
 	
 	OnXPToAttributeChangedDelegate.Broadcast(InXP);
 }
@@ -105,6 +120,16 @@ void ALabyrinthPlayerState::SetSpellPoints(int32 InPoints)
 {
 	SpellPoints = InPoints;
 	OnSpellPointsChangedDelegate.Broadcast(SpellPoints);
+}
+
+void ALabyrinthPlayerState::SetLastUsedSkill(FGameplayTag LastUsedSkillTag)
+{
+	LastSkillUsed = LastUsedSkillTag;
+}
+
+void ALabyrinthPlayerState::OnRep_LastSkillUsed(FGameplayTag OldLastSkillUsed)
+{
+	
 }
 
 void ALabyrinthPlayerState::OnRep_Level(int32 OldLevel)
