@@ -12,6 +12,7 @@ void ULabyrinthDamageGameplayAbility::CauseDamage(AActor* TargetActor)
 {
 	FGameplayEffectSpecHandle DamageSpecHandle = MakeOutgoingGameplayEffectSpec(DamageEffectClass, 1.f);
 	const float ScaledDamage = Damage.GetValueAtLevel(GetAbilityLevel());
+	UE_LOG(LogTemp, Warning, TEXT("Labyrinthdamagegaempaly: Level: %d"), GetAbilityLevel());
 	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(DamageSpecHandle, DamageType, ScaledDamage);
 	GetAbilitySystemComponentFromActorInfo()->ApplyGameplayEffectSpecToTarget(*DamageSpecHandle.Data.Get(), UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor));
 }
@@ -26,7 +27,7 @@ FDamageEffectParams ULabyrinthDamageGameplayAbility::MakeDamageEffectParamsFromC
 	Params.SourceAbilitySystemComponent = GetAbilitySystemComponentFromActorInfo();
 	Params.TargetAbilitySystemComponent = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor);
 	Params.BaseDamage = Damage.GetValueAtLevel(GetAbilityLevel());
-	Params.AbilityLevel = GetAbilityLevel();
+	Params.AbilityLevel = GetAbilityLevel();   //TODO: This needs to use a calculation based on the skill being used.
 	Params.DamageType = DamageType;
 	Params.DebuffChance = DebuffChance;
 	Params.DebuffDamage = DebuffDamage;

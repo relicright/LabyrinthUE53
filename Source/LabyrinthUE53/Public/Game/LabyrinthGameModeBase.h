@@ -6,6 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "LabyrinthGameModeBase.generated.h"
 
+class UArmorItemInfo;
 class UAttributeXPLevelInfo;
 class UAbilityInfo;
 class UCharacterClassInfo;
@@ -28,6 +29,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Ability Info")
 	TObjectPtr<UAbilityInfo> AbilityInfo;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Ability Info")
+	TObjectPtr<UArmorItemInfo> ArmorItemInfo;
+	
 	// UPROPERTY(EditDefaultsOnly, Category = "Loot Tiers")
 	// TObjectPtr<ULootTiers> LootTiers;
 	//

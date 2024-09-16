@@ -6,6 +6,7 @@
 #include "AbilitySystem/LabyrinthAbilitySystemComponent.h"
 #include "AbilitySystem/LabyrinthAbilitySystemLibrary.h"
 #include "AbilitySystem/LabyrinthAttributeSet.h"
+#include "AbilitySystem/Data/ArmorItemInfo.h"
 #include "AbilitySystem/Data/AttributeXPLevelInfo.h"
 #include "Net/UnrealNetwork.h"
 
@@ -64,7 +65,6 @@ void ALabyrinthPlayerState::AddXPToAttribute(FGameplayTag Tag, int32 InXP)
 	ULabyrinthAttributeSet* LabyrinthAttSet = Cast<ULabyrinthAttributeSet>(AttributeSet);
 	TStaticFuncPtr<FGameplayAttribute()> InAttribute = LabyrinthAttSet->TagsToAttributes[Tag];
 	const float CurrentSkill = InAttribute().GetNumericValue(LabyrinthAttSet);
-	//const float CurrentSkill = LabyrinthAttSet->GetValueFromAttribute(LabyrinthAttSet->TagsToAttributes[Tag]);
 	UE_LOG(LogTemp, Warning, TEXT("PlayerState: CurrentSkill: %f"), CurrentSkill);
 	
 	const float LevelUpCoefficient = LevelUpCurve->Eval(CurrentSkill);
@@ -74,7 +74,10 @@ void ALabyrinthPlayerState::AddXPToAttribute(FGameplayTag Tag, int32 InXP)
 	if (CurrentXP > LevelUpCoefficient)
 	{
 		AttributeXP[Tag] = 0;
-		GetAbilitySystemComponent()->SetNumericAttributeBase(InAttribute(), CurrentSkill + 1);
+		if (CurrentSkill < 100)
+		{
+			GetAbilitySystemComponent()->SetNumericAttributeBase(InAttribute(), CurrentSkill + 1);
+		}
 	}
 	
 	OnXPToAttributeChangedDelegate.Broadcast(InXP);
@@ -125,6 +128,47 @@ void ALabyrinthPlayerState::SetSpellPoints(int32 InPoints)
 void ALabyrinthPlayerState::SetLastUsedSkill(FGameplayTag LastUsedSkillTag)
 {
 	LastSkillUsed = LastUsedSkillTag;
+}
+
+void ALabyrinthPlayerState::ApplyEquipmentArmorEffect(TSubclassOf<UGameplayEffect> GameplayEffectClass, const FGameplayTag& SlotTag, const FArmorItemDefaultInfo& ArmorInfo, int32 ItemLevel)
+{
+	check(AbilitySystemComponent);
+	check(GameplayEffectClass);
+	
+	for (auto ArmorEffectHandle : ActiveArmorEffectHandles)
+	{
+		if (ArmorEffectHandle.Value == SlotTag)
+		{
+			RemoveEquipmentArmorEffect(SlotTag);
+		}
+	}
+	
+	FGameplayEffectContextHandle EffectContextHandle = AbilitySystemComponent->MakeEffectContext();
+	EffectContextHandle.AddSourceObject(this);
+	const FGameplayEffectSpecHandle EffectSpecHandle = AbilitySystemComponent->MakeOutgoingSpec(
+		GameplayEffectClass,
+		ItemLevel,
+		EffectContextHandle
+		);
+	const FActiveGameplayEffectHandle ActiveEffectHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data.Get());
+	ActiveArmorEffectHandles.Add(ActiveEffectHandle, SlotTag);
+}
+
+void ALabyrinthPlayerState::RemoveEquipmentArmorEffect(FGameplayTag Tag)
+{
+	TArray<FActiveGameplayEffectHandle> HandlesToRemove;
+	for (TTuple<FActiveGameplayEffectHandle, FGameplayTag> HandlePair : ActiveArmorEffectHandles)
+	{
+		if (Tag == HandlePair.Value)
+		{
+			AbilitySystemComponent->RemoveActiveGameplayEffect(HandlePair.Key, 1);
+			HandlesToRemove.Add(HandlePair.Key);
+		}
+	}
+	for (FActiveGameplayEffectHandle& Handle : HandlesToRemove)
+	{
+		ActiveArmorEffectHandles.FindAndRemoveChecked(Handle);
+	}
 }
 
 void ALabyrinthPlayerState::OnRep_LastSkillUsed(FGameplayTag OldLastSkillUsed)

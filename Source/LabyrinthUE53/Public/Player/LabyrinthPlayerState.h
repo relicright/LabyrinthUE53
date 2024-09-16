@@ -5,7 +5,9 @@
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
 #include "AbilitySystem/LabyrinthAttributeSet.h"
+#include "Game/LabyrinthGameModeBase.h"
 #include "GameFramework/PlayerState.h"
+#include "AbilitySystem/Data/ArmorItemInfo.h"
 #include "LabyrinthPlayerState.generated.h"
 
 struct FGameplayAttributeData;
@@ -57,6 +59,9 @@ public:
 	void SetAttributePoints(int32 InPoints);
 	void SetSpellPoints(int32 InPoints);
 	void SetLastUsedSkill(FGameplayTag LastUsedSkillTag);
+	
+	void ApplyEquipmentArmorEffect(TSubclassOf<UGameplayEffect> GameplayEffectClass, const FGameplayTag& SlotTag, const FArmorItemDefaultInfo& ArmorInfo,  int32 ItemLevel);
+	void RemoveEquipmentArmorEffect(FGameplayTag Tag);
 
 protected:
 	
@@ -67,7 +72,13 @@ protected:
 	TObjectPtr<UAttributeSet> AttributeSet;
 
 	UPROPERTY()
+	TObjectPtr<ALabyrinthGameModeBase> GameMode;
+
+	UPROPERTY()
 	TMap<FGameplayTag, int32> AttributeXP;
+
+	UPROPERTY()
+	TMap<FActiveGameplayEffectHandle, FGameplayTag> ActiveArmorEffectHandles;
 
 	UPROPERTY(ReplicatedUsing=OnRep_LastSkillUsed)
 	FGameplayTag LastSkillUsed = FGameplayTag();

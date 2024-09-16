@@ -65,6 +65,18 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Character")
 	void SetShouldFaceMouseCursor(bool bShouldFace);
 
+	UFUNCTION(BlueprintCallable)
+	void EquipArmor(const FGameplayTag& ArmorItem, FGameplayTag& ArmorSlotTag, const int32 Level);
+
+	UFUNCTION(Server, Reliable)
+	void ServerEquipArmor(const FGameplayTag& ArmorItem, const FGameplayTag& ArmorSlotTag, const int32 Level);
+
+	UFUNCTION(BlueprintCallable)
+	void UnEquipArmor(FGameplayTag ArmorSlotTag);
+
+	UFUNCTION(Server, Reliable)
+	void ServerUnEquipArmor(const FGameplayTag ArmorSlotTag);
+
 protected:
 
 private:

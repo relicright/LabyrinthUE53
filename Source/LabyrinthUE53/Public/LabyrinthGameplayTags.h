@@ -121,6 +121,30 @@ public:
 	FGameplayTag CombatSocket_LeftHand;
 	FGameplayTag CombatSocket_Body;
 
+	FGameplayTag Equipment_Armor_Helmet;
+	FGameplayTag Equipment_Armor_Chest;
+	FGameplayTag Equipment_Armor_Gloves;
+	FGameplayTag Equipment_Armor_Legs;
+	FGameplayTag Equipment_Armor_Feet;
+
+	FGameplayTag Item_Armor_PlateHelm;
+	FGameplayTag Item_Armor_PlateGloves;
+	FGameplayTag Item_Armor_PlateChest;
+	FGameplayTag Item_Armor_PlateBoots;
+	FGameplayTag Item_Armor_PlatePants;
+
+	FGameplayTag Item_Armor_LeatherHelm;
+	FGameplayTag Item_Armor_LeatherGloves;
+	FGameplayTag Item_Armor_LeatherChest;
+	FGameplayTag Item_Armor_LeatherBoots;
+	FGameplayTag Item_Armor_LeatherPants;
+
+	FGameplayTag Item_Armor_ClothHelm;
+	FGameplayTag Item_Armor_ClothGloves;
+	FGameplayTag Item_Armor_ClothChest;
+	FGameplayTag Item_Armor_ClothBoots;
+	FGameplayTag Item_Armor_ClothPants;
+
 	FGameplayTag Montage_Attack_1;
 	FGameplayTag Montage_Attack_2;
 	FGameplayTag Montage_Attack_3;

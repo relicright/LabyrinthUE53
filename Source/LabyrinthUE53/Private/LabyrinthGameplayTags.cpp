@@ -509,6 +509,116 @@ void FLabyrinthGameplayTags::InitializeNativeGameplayTags()
 		FString("Body Part")
 		);
 
+
+	/*
+	 * Equipment Armor Tags
+	 */
+
+	GameplayTags.Equipment_Armor_Chest = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Equipment.Armor.Chest"),
+		FString("Chest")
+		);
+
+	GameplayTags.Equipment_Armor_Feet = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Equipment.Armor.Feet"),
+		FString("Feet")
+		);
+
+	GameplayTags.Equipment_Armor_Helmet = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Equipment.Armor.Helmet"),
+		FString("Helmet")
+		);
+
+	GameplayTags.Equipment_Armor_Gloves = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Equipment.Armor.Gloves"),
+		FString("Gloves")
+		);
+
+	GameplayTags.Equipment_Armor_Legs = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Equipment.Armor.Legs"),
+		FString("Legs")
+		);
+
+
+	/*
+	*  Armor Tags
+	*/
+
+	GameplayTags.Item_Armor_PlateHelm = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Item.Armor.PlateHelm"),
+		FString("Plate Helm")
+		);
+
+	GameplayTags.Item_Armor_PlateChest= UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Item.Armor.PlateChest"),
+		FString("Plate Chest")
+		);
+
+	GameplayTags.Item_Armor_PlateGloves = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Item.Armor.PlateGloves"),
+		FString("Plate Gloves")
+		);
+
+	GameplayTags.Item_Armor_PlatePants = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Item.Armor.PlatePants"),
+		FString("Plate Pants")
+		);
+
+	GameplayTags.Item_Armor_PlateBoots = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Item.Armor.PlateBoots"),
+		FString("Plate Boots")
+		);
+
+	GameplayTags.Item_Armor_LeatherHelm = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Item.Armor.LeatherHelm"),
+		FString("Leather Helm")
+		);
+
+	GameplayTags.Item_Armor_LeatherChest= UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Item.Armor.LeatherChest"),
+		FString("Leather Chest")
+		);
+
+	GameplayTags.Item_Armor_LeatherGloves = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Item.Armor.LeatherGloves"),
+		FString("Leather Gloves")
+		);
+
+	GameplayTags.Item_Armor_LeatherPants = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Item.Armor.LeatherPants"),
+		FString("Leather Pants")
+		);
+
+	GameplayTags.Item_Armor_LeatherBoots = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Item.Armor.LeatherBoots"),
+		FString("Leather Boots")
+		);
+
+	GameplayTags.Item_Armor_ClothHelm = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Item.Armor.ClothHelm"),
+		FString("Cloth Helm")
+		);
+
+	GameplayTags.Item_Armor_LeatherChest= UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Item.Armor.ClothChest"),
+		FString("Cloth Chest")
+		);
+
+	GameplayTags.Item_Armor_ClothGloves = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Item.Armor.ClothGloves"),
+		FString("Cloth Gloves")
+		);
+
+	GameplayTags.Item_Armor_ClothPants = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Item.Armor.ClothPants"),
+		FString("Cloth Pants")
+		);
+
+	GameplayTags.Item_Armor_ClothBoots = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Item.Armor.ClothBoots"),
+		FString("Cloth Boots")
+		);
+	
 	/*
 	 * Montage Tags
 	 */

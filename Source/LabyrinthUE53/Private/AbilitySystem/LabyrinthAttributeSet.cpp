@@ -279,8 +279,6 @@ void ULabyrinthAttributeSet::HandleIncomingXP(const FEffectProperties& Props)
 		
 		IPlayerInterface::Execute_AddToXP(Props.SourceCharacter, LocalIncomingXP);
 
-		// TODO: Need to add an event to the ListenForEvent gameplay effect.  It should listen for tags with Attribute.Skill or the equivalent.
-		// There should be a way to add xp when gameplay abilities are used and hit a target.  This will prevent needing to kill a target to gain skills.
 		FGameplayTag LastSkill = IPlayerInterface::Execute_GetLastSkillUsed(Props.SourceCharacter);
 		if (LastSkill != FGameplayTag())
 			IPlayerInterface::Execute_AddXPToAttribute(Props.SourceCharacter, LastSkill, LocalIncomingXP);
