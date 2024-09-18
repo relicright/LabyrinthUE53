@@ -65,4 +65,10 @@ public:
 	
 	UFUNCTION(BlueprintNativeEvent)
 	void LevelUp();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void EquipArmor(const FGameplayTag& ArmorItem, FGameplayTag& ArmorSlotTag, const int32 Level);
+
+	UFUNCTION(BlueprintNativeEvent)
+	void UnEquipArmor(FGameplayTag ArmorSlotTag);
 };

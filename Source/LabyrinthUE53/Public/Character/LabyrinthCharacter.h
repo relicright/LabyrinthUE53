@@ -34,6 +34,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void SetLastSkillUsed_Implementation(FGameplayTag LastUsedSkillTag) override;
 	
+	UFUNCTION(BlueprintCallable)
+	virtual void EquipArmor_Implementation(const FGameplayTag& ArmorItem, FGameplayTag& ArmorSlotTag, const int32 Level) override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void UnEquipArmor_Implementation(FGameplayTag ArmorSlotTag) override;
+	
 	virtual int32 FindLevelForXP_Implementation(int32 InXP) const override;
 	virtual int32 GetAttributePointsReward_Implementation(int32 Level) const override;
 	virtual int32 GetSpellPointsReward_Implementation(int32 Level) const override;
@@ -64,15 +70,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="Character")
 	void SetShouldFaceMouseCursor(bool bShouldFace);
-
-	UFUNCTION(BlueprintCallable)
-	void EquipArmor(const FGameplayTag& ArmorItem, FGameplayTag& ArmorSlotTag, const int32 Level);
-
+	
 	UFUNCTION(Server, Reliable)
 	void ServerEquipArmor(const FGameplayTag& ArmorItem, const FGameplayTag& ArmorSlotTag, const int32 Level);
-
-	UFUNCTION(BlueprintCallable)
-	void UnEquipArmor(FGameplayTag ArmorSlotTag);
 
 	UFUNCTION(Server, Reliable)
 	void ServerUnEquipArmor(const FGameplayTag ArmorSlotTag);

@@ -40,7 +40,16 @@ struct FArmorItemDefaultInfo
 	FName ItemDescription;
 
 	UPROPERTY(EditDefaultsOnly, Category= "ItemInfo")
+	TObjectPtr<USkeletalMesh> Mesh;
+
+	UPROPERTY(EditDefaultsOnly, Category= "ItemInfo")
+	TObjectPtr<UTexture2D> ItemImage;
+
+	UPROPERTY(EditDefaultsOnly, Category= "ItemInfo")
 	FGameplayTag EquipmentSlotTag;
+	
+	UPROPERTY(EditDefaultsOnly, Category= "ItemInfo")
+	int32 Weight;
 };
 
 
@@ -57,10 +66,5 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category="Armor Item Defaults")
 	TMap<FGameplayTag, FArmorItemDefaultInfo> ArmorItemInformation;
 
-	// UPROPERTY(EditDefaultsOnly, Category = "Armor Item Defaults")
-	// TObjectPtr<UCurveTable> ArmorItemStatLevels;
-	
 	FArmorItemDefaultInfo GetArmorItemInfo(FGameplayTag Tag);
-
-	// TODO: Make a way to find specific curve table needed for different types of armor based on the item cost (maybe change to level)
 };

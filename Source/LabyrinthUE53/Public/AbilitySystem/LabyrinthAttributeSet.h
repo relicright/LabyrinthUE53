@@ -150,6 +150,10 @@ public:
 	FGameplayAttributeData MaxStamina;
 	ATTRIBUTE_ACCESSORS(ULabyrinthAttributeSet, MaxStamina);
 
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_CarryCapacity, Category = "Capacity Attributes")
+	FGameplayAttributeData CarryCapacity;
+	ATTRIBUTE_ACCESSORS(ULabyrinthAttributeSet, CarryCapacity);
+
 	/*
 	 * Primary Skill Attributes
 	 */
@@ -326,7 +330,10 @@ public:
 	void OnRep_MaxMana(const FGameplayAttributeData& OldMaxMana) const;
 
 	UFUNCTION()
-	void OnRep_MaxStamina(const FGameplayAttributeData& OldMaxStamina) const;	
+	void OnRep_MaxStamina(const FGameplayAttributeData& OldMaxStamina) const;
+
+	UFUNCTION()
+	void OnRep_CarryCapacity(const FGameplayAttributeData& OldCarryCapacity) const;
 
 	UFUNCTION()
 	void OnRep_FireResistance(const FGameplayAttributeData& OldFireResistance) const;

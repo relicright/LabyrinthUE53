@@ -134,24 +134,32 @@ void ALabyrinthPlayerState::ApplyEquipmentArmorEffect(TSubclassOf<UGameplayEffec
 {
 	check(AbilitySystemComponent);
 	check(GameplayEffectClass);
-	
+
+	bool bRemovedArmor = false;
 	for (auto ArmorEffectHandle : ActiveArmorEffectHandles)
 	{
 		if (ArmorEffectHandle.Value == SlotTag)
 		{
-			RemoveEquipmentArmorEffect(SlotTag);
+			bRemovedArmor = true;
 		}
 	}
-	
-	FGameplayEffectContextHandle EffectContextHandle = AbilitySystemComponent->MakeEffectContext();
-	EffectContextHandle.AddSourceObject(this);
-	const FGameplayEffectSpecHandle EffectSpecHandle = AbilitySystemComponent->MakeOutgoingSpec(
-		GameplayEffectClass,
-		ItemLevel,
-		EffectContextHandle
-		);
-	const FActiveGameplayEffectHandle ActiveEffectHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data.Get());
-	ActiveArmorEffectHandles.Add(ActiveEffectHandle, SlotTag);
+
+	if (bRemovedArmor)
+	{
+		RemoveEquipmentArmorEffectAndApplyNew(SlotTag, GameplayEffectClass, SlotTag, ArmorInfo, ItemLevel);
+	}
+	else
+	{
+		FGameplayEffectContextHandle EffectContextHandle = AbilitySystemComponent->MakeEffectContext();
+		EffectContextHandle.AddSourceObject(this);
+		const FGameplayEffectSpecHandle EffectSpecHandle = AbilitySystemComponent->MakeOutgoingSpec(
+			GameplayEffectClass,
+			ItemLevel,
+			EffectContextHandle
+			);
+		const FActiveGameplayEffectHandle ActiveEffectHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data.Get());
+		ActiveArmorEffectHandles.Add(ActiveEffectHandle, SlotTag);
+	}
 }
 
 void ALabyrinthPlayerState::RemoveEquipmentArmorEffect(FGameplayTag Tag)
@@ -169,6 +177,35 @@ void ALabyrinthPlayerState::RemoveEquipmentArmorEffect(FGameplayTag Tag)
 	{
 		ActiveArmorEffectHandles.FindAndRemoveChecked(Handle);
 	}
+}
+
+void ALabyrinthPlayerState::RemoveEquipmentArmorEffectAndApplyNew(FGameplayTag Tag,
+	TSubclassOf<UGameplayEffect> GameplayEffectClass, const FGameplayTag& SlotTag,
+	const FArmorItemDefaultInfo& ArmorInfo, int32 ItemLevel)
+{
+	TArray<FActiveGameplayEffectHandle> HandlesToRemove;
+	for (TTuple<FActiveGameplayEffectHandle, FGameplayTag> HandlePair : ActiveArmorEffectHandles)
+	{
+		if (Tag == HandlePair.Value)
+		{
+			AbilitySystemComponent->RemoveActiveGameplayEffect(HandlePair.Key, 1);
+			HandlesToRemove.Add(HandlePair.Key);
+		}
+	}
+	for (FActiveGameplayEffectHandle& Handle : HandlesToRemove)
+	{
+		ActiveArmorEffectHandles.FindAndRemoveChecked(Handle);
+	}
+
+	FGameplayEffectContextHandle EffectContextHandle = AbilitySystemComponent->MakeEffectContext();
+	EffectContextHandle.AddSourceObject(this);
+	const FGameplayEffectSpecHandle EffectSpecHandle = AbilitySystemComponent->MakeOutgoingSpec(
+		GameplayEffectClass,
+		ItemLevel,
+		EffectContextHandle
+		);
+	const FActiveGameplayEffectHandle ActiveEffectHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data.Get());
+	ActiveArmorEffectHandles.Add(ActiveEffectHandle, SlotTag);
 }
 
 void ALabyrinthPlayerState::OnRep_LastSkillUsed(FGameplayTag OldLastSkillUsed)

@@ -32,6 +32,7 @@ public:
 	FGameplayTag Attributes_Secondary_MaxHealth;
 	FGameplayTag Attributes_Secondary_MaxMana;
 	FGameplayTag Attributes_Secondary_MaxStamina;
+	FGameplayTag Attributes_Secondary_CarryCapacity;
 
 	FGameplayTag Attributes_PrimarySkill;
 	FGameplayTag Attributes_PrimarySkill_Arcanist;

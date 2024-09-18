@@ -22,6 +22,31 @@ ALabyrinthBaseCharacter::ALabyrinthBaseCharacter()
 	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>("Weapon");
 	Weapon->SetupAttachment(GetMesh(), FName("WeaponHandSocket"));
 	Weapon->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	Helmet = CreateDefaultSubobject<USkeletalMeshComponent>("Helmet");
+	Helmet->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform);
+	Helmet->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	Helmet->SetLeaderPoseComponent(GetMesh());
+
+	Gloves = CreateDefaultSubobject<USkeletalMeshComponent>("Gloves");
+	Gloves->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform);
+	Gloves->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	Gloves->SetLeaderPoseComponent(GetMesh());
+
+	Pants = CreateDefaultSubobject<USkeletalMeshComponent>("Pants");
+	Pants->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform);
+	Pants->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	Pants->SetLeaderPoseComponent(GetMesh());
+
+	Chest = CreateDefaultSubobject<USkeletalMeshComponent>("Chest");
+	Chest->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform);
+	Chest->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	Chest->SetLeaderPoseComponent(GetMesh());
+
+	Boots = CreateDefaultSubobject<USkeletalMeshComponent>("Boots");
+	Boots->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform);
+	Boots->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	Boots->SetLeaderPoseComponent(GetMesh());
 	
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 	GetCapsuleComponent()->SetGenerateOverlapEvents(false);

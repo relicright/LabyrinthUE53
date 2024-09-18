@@ -11,8 +11,8 @@
 #include "LabyrinthPlayerState.generated.h"
 
 struct FGameplayAttributeData;
-class UAbilitySystemComponent;
-class UAttributeSet;
+class ULabyrinthAbilitySystemComponent;
+class ULabyrinthAttributeSet;
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnPlayerStatChanged, int32 /*StatValue*/)
 DECLARE_MULTICAST_DELEGATE_TwoParams(FOnLevelChanged, int32 /*StatValue*/, bool /*bLevelUp*/)
@@ -62,14 +62,15 @@ public:
 	
 	void ApplyEquipmentArmorEffect(TSubclassOf<UGameplayEffect> GameplayEffectClass, const FGameplayTag& SlotTag, const FArmorItemDefaultInfo& ArmorInfo,  int32 ItemLevel);
 	void RemoveEquipmentArmorEffect(FGameplayTag Tag);
+	void RemoveEquipmentArmorEffectAndApplyNew(FGameplayTag Tag, TSubclassOf<UGameplayEffect> GameplayEffectClass, const FGameplayTag& SlotTag, const FArmorItemDefaultInfo& ArmorInfo,  int32 ItemLevel);
 
 protected:
 	
 	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
+	TObjectPtr<ULabyrinthAbilitySystemComponent> AbilitySystemComponent;
 
 	UPROPERTY()
-	TObjectPtr<UAttributeSet> AttributeSet;
+	TObjectPtr<ULabyrinthAttributeSet> AttributeSet;
 
 	UPROPERTY()
 	TObjectPtr<ALabyrinthGameModeBase> GameMode;

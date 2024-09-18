@@ -38,6 +38,7 @@ ULabyrinthAttributeSet::ULabyrinthAttributeSet()
 	TagsToAttributes.Add(GameplayTags.Attributes_Secondary_MaxHealth, GetMaxHealthAttribute);
 	TagsToAttributes.Add(GameplayTags.Attributes_Secondary_MaxMana, GetMaxManaAttribute);
 	TagsToAttributes.Add(GameplayTags.Attributes_Secondary_MaxStamina, GetMaxStaminaAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Secondary_CarryCapacity, GetCarryCapacityAttribute);
 
 	/* Primary Skills Attributes */
 	TagsToAttributes.Add(GameplayTags.Attributes_PrimarySkill_Arcanist, GetArcanistAttribute);
@@ -96,6 +97,7 @@ void ULabyrinthAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty
 	DOREPLIFETIME_CONDITION_NOTIFY(ULabyrinthAttributeSet, MaxHealth, COND_None, REPNOTIFY_Always);	
 	DOREPLIFETIME_CONDITION_NOTIFY(ULabyrinthAttributeSet, MaxMana, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(ULabyrinthAttributeSet, MaxStamina, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(ULabyrinthAttributeSet, CarryCapacity, COND_None, REPNOTIFY_Always);
 
 	// Primary Skill Attributes
 	DOREPLIFETIME_CONDITION_NOTIFY(ULabyrinthAttributeSet, Arcanist, COND_None, REPNOTIFY_Always);
@@ -156,8 +158,6 @@ void ULabyrinthAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModC
 	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
 	{
 		SetHealth(FMath::Clamp(GetHealth(), 0.f, GetMaxHealth()));
-
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *GetReligionAttribute().AttributeName);
 	}
 	if (Data.EvaluatedData.Attribute == GetManaAttribute())
 	{
@@ -498,6 +498,11 @@ void ULabyrinthAttributeSet::OnRep_MaxMana(const FGameplayAttributeData& OldMaxM
 void ULabyrinthAttributeSet::OnRep_MaxStamina(const FGameplayAttributeData& OldMaxStamina) const
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(ULabyrinthAttributeSet, MaxStamina, OldMaxStamina);
+}
+
+void ULabyrinthAttributeSet::OnRep_CarryCapacity(const FGameplayAttributeData& OldCarryCapacity) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(ULabyrinthAttributeSet, CarryCapacity, OldCarryCapacity);
 }
 
 void ULabyrinthAttributeSet::OnRep_FireResistance(const FGameplayAttributeData& OldFireResistance) const

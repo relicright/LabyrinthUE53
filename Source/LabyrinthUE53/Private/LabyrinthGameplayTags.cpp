@@ -100,6 +100,11 @@ void FLabyrinthGameplayTags::InitializeNativeGameplayTags()
 		FString("Maximum amount of Stamina obtainable")
 		);
 
+	GameplayTags.Attributes_Secondary_CarryCapacity = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Secondary.CarryCapacity"),
+		FString("Maximum amount of weight player can carry")
+		);
+
 	/*
 	* Primary Skill Attributes
 	*/

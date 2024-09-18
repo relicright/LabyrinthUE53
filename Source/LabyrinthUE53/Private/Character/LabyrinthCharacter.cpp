@@ -208,17 +208,19 @@ void ALabyrinthCharacter::SetShouldFaceMouseCursor(bool bShouldFace)
 	bShouldFaceMouseCursor = bShouldFace;
 }
 
-void ALabyrinthCharacter::EquipArmor(const FGameplayTag& ArmorItem, FGameplayTag& ArmorSlotTag, const int32 Level)
+void ALabyrinthCharacter::EquipArmor_Implementation(const FGameplayTag& ArmorItem, FGameplayTag& ArmorSlotTag,
+	const int32 Level)
 {
 	// TODO:  Check the overlapping item either by mouse cursor or standing over to see which item should be sent to be equipped.
 	// It might be possible to use Gameplay cue to equip armor, but if not then multicast should work for this.
 	// Should also be useable from the inventory which means we cant use overlap here, we'd have to use that in the input somewhere
+	// Error: Says something about ReceiveFastArrayItem: Invalid property terminator handle
 	
 	ServerEquipArmor(ArmorItem, ArmorSlotTag, Level);
 }
 
 void ALabyrinthCharacter::ServerEquipArmor_Implementation(const FGameplayTag& ArmorItem, const FGameplayTag& ArmorSlotTag,
-	const int32 Level)
+                                                          const int32 Level)
 {
 	// TODO: Need to check if the player actually has the armor in their inventory to equip or if they are standing near the item
 	
@@ -233,7 +235,7 @@ void ALabyrinthCharacter::ServerEquipArmor_Implementation(const FGameplayTag& Ar
 	// TODO: Should most likely send a multicast here to show the item equipped on the player to everyone
 }
 
-void ALabyrinthCharacter::UnEquipArmor(FGameplayTag ArmorSlotTag)
+void ALabyrinthCharacter::UnEquipArmor_Implementation(FGameplayTag ArmorSlotTag)
 {
 	// TODO: Need to check if the player actually has the armor in their inventory to unequip
 	
