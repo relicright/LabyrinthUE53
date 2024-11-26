@@ -7,7 +7,7 @@
 #include "AbilitySystem/LabyrinthAttributeSet.h"
 #include "Game/LabyrinthGameModeBase.h"
 #include "GameFramework/PlayerState.h"
-#include "AbilitySystem/Data/ArmorItemInfo.h"
+#include "AbilitySystem/Data/ItemInfo.h"
 #include "LabyrinthPlayerState.generated.h"
 
 struct FGameplayAttributeData;
@@ -60,9 +60,9 @@ public:
 	void SetSpellPoints(int32 InPoints);
 	void SetLastUsedSkill(FGameplayTag LastUsedSkillTag);
 	
-	void ApplyEquipmentArmorEffect(TSubclassOf<UGameplayEffect> GameplayEffectClass, const FGameplayTag& SlotTag, const FArmorItemDefaultInfo& ArmorInfo,  int32 ItemLevel);
+	void ApplyEquipmentArmorEffect(TSubclassOf<UGameplayEffect> GameplayEffectClass, const FGameplayTag& SlotTag, const FItemDefaultInfo& ArmorInfo,  int32 ItemLevel);
 	void RemoveEquipmentArmorEffect(FGameplayTag Tag);
-	void RemoveEquipmentArmorEffectAndApplyNew(FGameplayTag Tag, TSubclassOf<UGameplayEffect> GameplayEffectClass, const FGameplayTag& SlotTag, const FArmorItemDefaultInfo& ArmorInfo,  int32 ItemLevel);
+	void RemoveEquipmentArmorEffectAndApplyNew(FGameplayTag Tag, TSubclassOf<UGameplayEffect> GameplayEffectClass, const FGameplayTag& SlotTag, const FItemDefaultInfo& ArmorInfo,  int32 ItemLevel);
 
 protected:
 	

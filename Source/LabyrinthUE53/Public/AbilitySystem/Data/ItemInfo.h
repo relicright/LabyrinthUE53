@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
 #include "AbilitySystem/LabyrinthAttributeSet.h"
-#include "ArmorItemInfo.generated.h"
+#include "ItemInfo.generated.h"
 
 struct FGameplayTag;
 class UGameplayEffect;
@@ -23,7 +23,7 @@ enum class EItemRarity : uint8
 };
 
 USTRUCT(BlueprintType)
-struct FArmorItemDefaultInfo
+struct FItemDefaultInfo
 {
 	GENERATED_BODY()
 
@@ -64,7 +64,7 @@ class LABYRINTHUE53_API UArmorItemInfo : public UDataAsset
 
 public:
 	UPROPERTY(EditDefaultsOnly, Category="Armor Item Defaults")
-	TMap<FGameplayTag, FArmorItemDefaultInfo> ArmorItemInformation;
+	TMap<FGameplayTag, FItemDefaultInfo> ArmorItemInformation;
 
-	FArmorItemDefaultInfo GetArmorItemInfo(FGameplayTag Tag);
+	FItemDefaultInfo GetArmorItemInfo(FGameplayTag Tag);
 };

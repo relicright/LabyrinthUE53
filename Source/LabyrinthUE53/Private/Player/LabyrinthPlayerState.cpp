@@ -6,7 +6,7 @@
 #include "AbilitySystem/LabyrinthAbilitySystemComponent.h"
 #include "AbilitySystem/LabyrinthAbilitySystemLibrary.h"
 #include "AbilitySystem/LabyrinthAttributeSet.h"
-#include "AbilitySystem/Data/ArmorItemInfo.h"
+#include "AbilitySystem/Data/ItemInfo.h"
 #include "AbilitySystem/Data/AttributeXPLevelInfo.h"
 #include "Net/UnrealNetwork.h"
 
@@ -130,7 +130,7 @@ void ALabyrinthPlayerState::SetLastUsedSkill(FGameplayTag LastUsedSkillTag)
 	LastSkillUsed = LastUsedSkillTag;
 }
 
-void ALabyrinthPlayerState::ApplyEquipmentArmorEffect(TSubclassOf<UGameplayEffect> GameplayEffectClass, const FGameplayTag& SlotTag, const FArmorItemDefaultInfo& ArmorInfo, int32 ItemLevel)
+void ALabyrinthPlayerState::ApplyEquipmentArmorEffect(TSubclassOf<UGameplayEffect> GameplayEffectClass, const FGameplayTag& SlotTag, const FItemDefaultInfo& ArmorInfo, int32 ItemLevel)
 {
 	check(AbilitySystemComponent);
 	check(GameplayEffectClass);
@@ -181,7 +181,7 @@ void ALabyrinthPlayerState::RemoveEquipmentArmorEffect(FGameplayTag Tag)
 
 void ALabyrinthPlayerState::RemoveEquipmentArmorEffectAndApplyNew(FGameplayTag Tag,
 	TSubclassOf<UGameplayEffect> GameplayEffectClass, const FGameplayTag& SlotTag,
-	const FArmorItemDefaultInfo& ArmorInfo, int32 ItemLevel)
+	const FItemDefaultInfo& ArmorInfo, int32 ItemLevel)
 {
 	TArray<FActiveGameplayEffectHandle> HandlesToRemove;
 	for (TTuple<FActiveGameplayEffectHandle, FGameplayTag> HandlePair : ActiveArmorEffectHandles)

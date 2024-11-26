@@ -546,6 +546,40 @@ void FLabyrinthGameplayTags::InitializeNativeGameplayTags()
 
 
 	/*
+	*  Equipment Weapon Tags
+	*/
+
+	GameplayTags.Equipment_Weapon_RightHand = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Equipment.Weapon.RightHand"),
+		FString("Right Hand")
+		);
+
+	GameplayTags.Equipment_Weapon_LeftHand = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Equipment.Weapon.LeftHand"),
+		FString("Left Hand")
+		);
+
+	GameplayTags.Equipment_Weapon_TwoHand = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Equipment.Weapon.TwoHand"),
+		FString("Two Hand")
+		);
+
+	GameplayTags.Equipment_Consumable_1 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Equipment.Weapon.Consumable1"),
+		FString("Consumable 1")
+		);
+
+	GameplayTags.Equipment_Consumable_2 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Equipment.Weapon.Consumable2"),
+		FString("Consumable 2")
+		);
+
+	GameplayTags.Equipment_Consumable_3 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Equipment.Weapon.Consumable3"),
+		FString("Consumable 3")
+		);
+
+	/*
 	*  Armor Tags
 	*/
 
@@ -622,6 +656,159 @@ void FLabyrinthGameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.Item_Armor_ClothBoots = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Item.Armor.ClothBoots"),
 		FString("Cloth Boots")
+		);
+	
+	/*
+	*  Weapon Tags
+	*/
+
+	GameplayTags.Item_Weapon_LongSword = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Item.Weapon.LongSword"),
+		FString("Long Sword")
+		);
+	
+	GameplayTags.Item_Weapon_ShortSword = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Item.Weapon.ShortSword"),
+		FString("Short Sword")
+		);
+
+	GameplayTags.Item_Weapon_BastardSword = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Item.Weapon.BastardSword"),
+		FString("Bastard Sword")
+		);
+	
+	GameplayTags.Item_Weapon_Katana = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Item.Weapon.Katana"),
+		FString("Katana Sword")
+		);
+	
+	GameplayTags.Item_Weapon_Rapier = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Item.Weapon.Rapier"),
+		FString("Rapier Sword")
+		);
+
+	GameplayTags.Item_Weapon_DaggerMisericorde = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Item.Weapon.DaggerMisericorde"),
+		FString("Dagger Misericorde")
+		);
+
+	GameplayTags.Item_Weapon_DaggerAnelace = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Item.Weapon.DaggerAnelace"),
+		FString("Dagger Anelace")
+		);
+	
+	GameplayTags.Item_Weapon_LongBow = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Item.Weapon.LongBow"),
+		FString("LongBow")
+		);
+	
+	GameplayTags.Item_Weapon_Crossbow = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Item.Weapon.Crossbow"),
+		FString("Crossbow")
+		);
+
+	GameplayTags.Item_Weapon_Flail = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Item.Weapon.Flail "),
+		FString("Flail")
+		);
+
+	GameplayTags.Item_Weapon_Mace = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Item.Weapon.Mace "),
+		FString("Mace")
+		);
+
+	GameplayTags.Item_Weapon_Halberd = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Item.Weapon.Halberd "),
+		FString("Halberd")
+		);
+
+	GameplayTags.Item_Weapon_Spear = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	FName("Item.Weapon.Spear "),
+	FString("Spear")
+	);
+
+	GameplayTags.Item_Weapon_BattleAxe = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	FName("Item.Weapon.BattleAxe "),
+	FString("BattleAxe")
+	);
+
+	GameplayTags.Item_Weapon_Hatchet = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	FName("Item.Weapon.Hatchet "),
+	FString("Hatchet")
+	);
+
+	GameplayTags.Item_Weapon_Spellbook = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	FName("Item.Weapon.Spellbook "),
+	FString("Spellbook")
+	);
+
+	GameplayTags.Item_Weapon_Staff = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	FName("Item.Weapon.Staff"),
+	FString("Staff")
+	);
+	
+	GameplayTags.Item_Weapon_DivineIdol = UGameplayTagsManager::Get().AddNativeGameplayTag(
+    FName("Item.Weapon.DivineIdol"),
+    FString("Divine Idol")
+    );
+
+	GameplayTags.Item_Weapon_HolySymbol = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	FName("Item.Weapon.HolySymbol"),
+	FString("Holy Symbol")
+	);
+
+	GameplayTags.Item_Weapon_Cudgel = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	FName("Item.Weapon.Cudgel"),
+	FString("Cudgel")
+	);
+
+	GameplayTags.Item_Weapon_Nunchaku = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	FName("Item.Weapon.Nunchaku"),
+	FString("Nunchaku")
+	);
+
+	GameplayTags.Item_Weapon_StarKnife = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	FName("Item.Weapon.StarKnife"),
+	FString("Star Knife")
+	);
+
+	GameplayTags.Item_Weapon_SpikedChain = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	FName("Item.Weapon.SpikedChain"),
+	FString("Spiked Chain")
+	);
+
+	GameplayTags.Item_Weapon_Katar = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	FName("Item.Weapon.Katar"),
+	FString("Katar")
+	);
+
+	GameplayTags.Item_Weapon_Sai = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	FName("Item.Weapon.Sai"),
+	FString("Sai")
+	);
+
+	/*
+	*  Consumable Tags
+	*/
+
+	GameplayTags.Item_Consumable_HealthPotion = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Item.Consumable.HealthPotion"),
+		FString("Health Potion")
+		);
+
+	GameplayTags.Item_Consumable_ManaPotion = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Item.Consumable.ManaPotion"),
+		FString("Mana Potion")
+		);
+
+	GameplayTags.Item_Consumable_StaminaPotion = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Item.Consumable.StaminaPotion"),
+		FString("Stamina Potion")
+		);
+
+	GameplayTags.Item_Consumable_Caltrop = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Item.Consumable.Caltrop"),
+		FString("Caltrop")
 		);
 	
 	/*

@@ -229,7 +229,7 @@ void ALabyrinthCharacter::ServerEquipArmor_Implementation(const FGameplayTag& Ar
 
 	const ALabyrinthGameModeBase* LabyrinthGameMode = Cast<ALabyrinthGameModeBase>(UGameplayStatics::GetGameMode(this));
 	check(LabyrinthGameMode)
-	const FArmorItemDefaultInfo ArmorInfo = LabyrinthGameMode->ArmorItemInfo->GetArmorItemInfo(ArmorItem);
+	const FItemDefaultInfo ArmorInfo = LabyrinthGameMode->ArmorItemInfo->GetArmorItemInfo(ArmorItem);
 	LabyrinthPlayerState->ApplyEquipmentArmorEffect(ArmorInfo.PrimaryGameplayEffect, ArmorInfo.EquipmentSlotTag, ArmorInfo, Level);
 
 	// TODO: Should most likely send a multicast here to show the item equipped on the player to everyone

@@ -128,6 +128,14 @@ public:
 	FGameplayTag Equipment_Armor_Legs;
 	FGameplayTag Equipment_Armor_Feet;
 
+	FGameplayTag Equipment_Weapon_RightHand;
+	FGameplayTag Equipment_Weapon_LeftHand;
+	FGameplayTag Equipment_Weapon_TwoHand;
+
+	FGameplayTag Equipment_Consumable_1;
+	FGameplayTag Equipment_Consumable_2;
+	FGameplayTag Equipment_Consumable_3;
+
 	FGameplayTag Item_Armor_PlateHelm;
 	FGameplayTag Item_Armor_PlateGloves;
 	FGameplayTag Item_Armor_PlateChest;
@@ -145,7 +153,39 @@ public:
 	FGameplayTag Item_Armor_ClothChest;
 	FGameplayTag Item_Armor_ClothBoots;
 	FGameplayTag Item_Armor_ClothPants;
-
+	
+	FGameplayTag Item_Weapon_LongSword;
+	FGameplayTag Item_Weapon_ShortSword;
+	FGameplayTag Item_Weapon_BastardSword;
+	FGameplayTag Item_Weapon_Katana;
+	FGameplayTag Item_Weapon_Rapier;
+	FGameplayTag Item_Weapon_DaggerMisericorde;  //Mercy
+	FGameplayTag Item_Weapon_DaggerAnelace;	//Long dagger
+	FGameplayTag Item_Weapon_LongBow;
+	FGameplayTag Item_Weapon_Crossbow;
+	FGameplayTag Item_Weapon_WarHammer;
+	FGameplayTag Item_Weapon_Flail;
+	FGameplayTag Item_Weapon_Mace;
+	FGameplayTag Item_Weapon_Halberd;
+	FGameplayTag Item_Weapon_Spear;
+	FGameplayTag Item_Weapon_BattleAxe;
+	FGameplayTag Item_Weapon_Hatchet;
+	FGameplayTag Item_Weapon_Spellbook;
+	FGameplayTag Item_Weapon_Staff;
+	FGameplayTag Item_Weapon_DivineIdol;
+	FGameplayTag Item_Weapon_HolySymbol;
+	FGameplayTag Item_Weapon_Cudgel;
+	FGameplayTag Item_Weapon_Nunchaku;
+	FGameplayTag Item_Weapon_StarKnife;  // Throwable
+	FGameplayTag Item_Weapon_SpikedChain;
+	FGameplayTag Item_Weapon_Katar;  // Fist Knives
+	FGameplayTag Item_Weapon_Sai; 
+	
+	FGameplayTag Item_Consumable_HealthPotion;
+	FGameplayTag Item_Consumable_ManaPotion;
+	FGameplayTag Item_Consumable_StaminaPotion;
+	FGameplayTag Item_Consumable_Caltrop;
+	
 	FGameplayTag Montage_Attack_1;
 	FGameplayTag Montage_Attack_2;
 	FGameplayTag Montage_Attack_3;
