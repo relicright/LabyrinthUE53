@@ -237,7 +237,7 @@ void ALabyrinthCharacter::ServerEquipArmor_Implementation(const FGameplayTag& Ar
 
 void ALabyrinthCharacter::UnEquipArmor_Implementation(FGameplayTag ArmorSlotTag)
 {
-	// TODO: Need to check if the player actually has the armor in their inventory to unequip
+	// TODO: Need to check if the player actually has the armor in their inventory eqipped to unequip
 	
 	ServerUnEquipArmor(ArmorSlotTag);
 }

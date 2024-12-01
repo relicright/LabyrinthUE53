@@ -20,7 +20,10 @@ enum class ECharacterClass : uint8
 	BattleMage,
 	WarTemplar,
 	Muse,
-	
+	Werewolf,
+	SkeletonArcher,
+	SkeletonKnight,
+	SkeletonBomber,
 };
 
 USTRUCT(BlueprintType)
