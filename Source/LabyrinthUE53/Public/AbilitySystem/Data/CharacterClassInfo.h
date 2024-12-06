@@ -24,6 +24,7 @@ enum class ECharacterClass : uint8
 	SkeletonArcher,
 	SkeletonKnight,
 	SkeletonBomber,
+	Lich,
 };
 
 USTRUCT(BlueprintType)
