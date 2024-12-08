@@ -196,6 +196,8 @@ void ULabyrinthAttributeSet::PostAttributeChange(const FGameplayAttribute& Attri
 void ULabyrinthAttributeSet::HandleIncomingDamage(const FEffectProperties& Props)
 {
 	const float LocalIncomingDamage = GetIncomingDamage();
+	if (GetHealth() <= 0) return;
+	
 	SetIncomingDamage(0.f);
 	if (LocalIncomingDamage > 0.f)
 	{
