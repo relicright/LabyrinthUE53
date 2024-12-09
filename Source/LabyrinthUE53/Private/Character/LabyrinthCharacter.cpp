@@ -17,6 +17,7 @@
 #include "LabyrinthUE53/Public/Interaction/CombatInterface.h"
 #include "Net/UnrealNetwork.h"
 #include "Player/LabyrinthPlayerController.h"
+#include "UI/HUD/LabyrinthHUD.h"
 
 ALabyrinthCharacter::ALabyrinthCharacter()
 {
@@ -53,9 +54,9 @@ void ALabyrinthCharacter::PossessedBy(AController* NewController)
 	// 
 	// LoadProgress();
 	//
-	// if (AAuraGameModeBase* AuraGameMode = Cast<AAuraGameModeBase>(UGameplayStatics::GetGameMode(this)))
+	// if (ALabyrinthGameModeBase* LabyrinthGameMode = Cast<ALabyrinthGameModeBase>(UGameplayStatics::GetGameMode(this)))
 	// {
-	// 	AuraGameMode->LoadWorldState(GetWorld());
+	// 	LabyrinthGameMode->LoadWorldState(GetWorld());
 	// }
 }
 
@@ -138,9 +139,9 @@ void ALabyrinthCharacter::AddToPlayerLevel_Implementation(int32 InPlayerLevel)
 	check(LabyrinthPlayerState);
 	LabyrinthPlayerState->AddToLevel(InPlayerLevel);
 
-	if (ULabyrinthAbilitySystemComponent* AuraASC = Cast<ULabyrinthAbilitySystemComponent>(GetAbilitySystemComponent()))
+	if (ULabyrinthAbilitySystemComponent* LabyrinthASC = Cast<ULabyrinthAbilitySystemComponent>(GetAbilitySystemComponent()))
 	{
-		//AuraASC->UpdateAbilityStatuses(LabyrinthPlayerState->GetPlayerLevel());
+		//LabyrinthASC->UpdateAbilityStatuses(LabyrinthPlayerState->GetPlayerLevel());
 	}
 }
 
@@ -186,10 +187,10 @@ void ALabyrinthCharacter::Die(const FVector& DeathImpulse)
 	FTimerDelegate DeathTimerDelegate;
 	DeathTimerDelegate.BindLambda([this]()
 	{
-		ALabyrinthGameModeBase* AuraGM = Cast<ALabyrinthGameModeBase>(UGameplayStatics::GetGameMode(this));
-		if (AuraGM)
+		ALabyrinthGameModeBase* LabyrinthGM = Cast<ALabyrinthGameModeBase>(UGameplayStatics::GetGameMode(this));
+		if (LabyrinthGM)
 		{
-			AuraGM->PlayerDied(this);
+			LabyrinthGM->PlayerDied(this);
 		}
 	});
 	GetWorldTimerManager().SetTimer(DeathTimer, DeathTimerDelegate, DeathTime, false);
@@ -273,11 +274,11 @@ void ALabyrinthCharacter::InitAbilityActorInfo()
 	OnAscRegistered.Broadcast(AbilitySystemComponent);
 	AbilitySystemComponent->RegisterGameplayTagEvent(FLabyrinthGameplayTags::Get().Debuff_Stun, EGameplayTagEventType::NewOrRemoved).AddUObject(this, &ALabyrinthCharacter::StunTagChanged);
 
-	if (ALabyrinthPlayerController* AuraPlayerController = Cast<ALabyrinthPlayerController>(GetController()))
+	if (ALabyrinthPlayerController* LabyrinthPlayerController = Cast<ALabyrinthPlayerController>(GetController()))
 	{
-		// if (AAuraHUD* AuraHUD = Cast<AAuraHUD>(AuraPlayerController->GetHUD()))
-		// {
-		// 	AuraHUD->InitOverlay(AuraPlayerController, AuraPlayerState, AbilitySystemComponent, AttributeSet);
-		// }
+		if (ALabyrinthHUD* LabyrinthHUD = Cast<ALabyrinthHUD>(LabyrinthPlayerController->GetHUD()))
+		{
+			LabyrinthHUD->InitOverlay(LabyrinthPlayerController, LabyrinthPlayerState, AbilitySystemComponent, AttributeSet);
+		}
 	}
 }

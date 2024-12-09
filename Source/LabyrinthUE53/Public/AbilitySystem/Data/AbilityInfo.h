@@ -10,7 +10,7 @@
 class UGameplayAbility;
 
 USTRUCT(BlueprintType)
-struct FAuraAbilityInfo
+struct FLabyrinthAbilityInfo
 {
 	GENERATED_BODY()
 
@@ -53,7 +53,7 @@ class LABYRINTHUE53_API UAbilityInfo : public UDataAsset
 public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AbilityInformation")
-	TArray<FAuraAbilityInfo> AbilityInformation;
+	TArray<FLabyrinthAbilityInfo> AbilityInformation;
 
-	FAuraAbilityInfo FindAbilityInfoForTag(const FGameplayTag& AbilityTag, bool bLogNotFound = false) const;
+	FLabyrinthAbilityInfo FindAbilityInfoForTag(const FGameplayTag& AbilityTag, bool bLogNotFound = false) const;
 };

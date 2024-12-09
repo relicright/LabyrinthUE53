@@ -10,9 +10,9 @@
 #include "AbilitySystem/Data/ItemInfo.h"
 #include "LabyrinthPlayerState.generated.h"
 
-struct FGameplayAttributeData;
-class ULabyrinthAbilitySystemComponent;
-class ULabyrinthAttributeSet;
+class UAbilitySystemComponent;
+class UAttributeSet;
+class ULevelUpInfo;
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnPlayerStatChanged, int32 /*StatValue*/)
 DECLARE_MULTICAST_DELEGATE_TwoParams(FOnLevelChanged, int32 /*StatValue*/, bool /*bLevelUp*/)
@@ -35,6 +35,9 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
+
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<ULevelUpInfo> LevelUpInfo;
 
 	FOnPlayerStatChanged OnXPChangedDelegate;
 	FOnPlayerStatChanged OnXPToAttributeChangedDelegate;
@@ -67,10 +70,10 @@ public:
 protected:
 	
 	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<ULabyrinthAbilitySystemComponent> AbilitySystemComponent;
+	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 
 	UPROPERTY()
-	TObjectPtr<ULabyrinthAttributeSet> AttributeSet;
+	TObjectPtr<UAttributeSet> AttributeSet;
 
 	UPROPERTY()
 	TObjectPtr<ALabyrinthGameModeBase> GameMode;
