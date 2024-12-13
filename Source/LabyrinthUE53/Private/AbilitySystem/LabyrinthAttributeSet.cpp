@@ -231,7 +231,7 @@ void ULabyrinthAttributeSet::PostAttributeChange(const FGameplayAttribute& Attri
 	{
 		if (GetActorInfo()->AvatarActor->Implements<UPlayerInterface>())
 		{
-		 		IPlayerInterface::Execute_UpdateMovementSpeed(GetActorInfo()->AvatarActor.Get(), GetMoveSpeed());
+		 	IPlayerInterface::Execute_UpdateMovementSpeed(GetActorInfo()->AvatarActor.Get(), GetMoveSpeed());
 		}
 	}
 }
