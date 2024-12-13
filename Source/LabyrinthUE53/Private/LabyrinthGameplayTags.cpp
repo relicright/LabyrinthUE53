@@ -100,9 +100,39 @@ void FLabyrinthGameplayTags::InitializeNativeGameplayTags()
 		FString("Maximum amount of Stamina obtainable")
 		);
 
+	GameplayTags.Attributes_Secondary_MoveSpeed = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Secondary.MoveSpeed"),
+		FString("Current movement speed")
+		);
+
+	GameplayTags.Attributes_Secondary_BaseMoveSpeed = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Secondary.BaseMoveSpeed"),
+		FString("Base movement speed")
+		);
+
+	GameplayTags.Attributes_Secondary_ArmorMoveSpeed = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Secondary.ArmorMoveSpeed"),
+		FString("Armor movement speed")
+		);
+	
+	GameplayTags.Attributes_Secondary_BuffMoveSpeed = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	FName("Attributes.Secondary.BuffMoveSpeed"),
+	FString("Buff movement speed")
+	);
+
+	GameplayTags.Attributes_Secondary_WeightMoveSpeed = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	FName("Attributes.Secondary.WeightMoveSpeed"),
+	FString("Weight movement speed")
+	);
+
 	GameplayTags.Attributes_Secondary_CarryCapacity = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Attributes.Secondary.CarryCapacity"),
-		FString("Maximum amount of weight player can carry")
+		FString("Current amount of weight player can carry")
+		);
+
+	GameplayTags.Attributes_Secondary_CurrentWeight = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Secondary.CurrentWeight"),
+		FString("Current amount of weight player is carrying")
 		);
 
 	/*

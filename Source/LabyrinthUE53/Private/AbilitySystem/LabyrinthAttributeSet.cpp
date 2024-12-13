@@ -9,6 +9,7 @@
 #include "Net/UnrealNetwork.h"
 #include "LabyrinthGameplayTags.h"
 #include "AbilitySystem/LabyrinthAbilitySystemLibrary.h"
+#include "Character/LabyrinthCharacter.h"
 #include "GameFramework/Character.h"
 #include "Interaction/CombatInterface.h"
 #include "Interaction/PlayerInterface.h"
@@ -38,7 +39,13 @@ ULabyrinthAttributeSet::ULabyrinthAttributeSet()
 	TagsToAttributes.Add(GameplayTags.Attributes_Secondary_MaxHealth, GetMaxHealthAttribute);
 	TagsToAttributes.Add(GameplayTags.Attributes_Secondary_MaxMana, GetMaxManaAttribute);
 	TagsToAttributes.Add(GameplayTags.Attributes_Secondary_MaxStamina, GetMaxStaminaAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Secondary_MoveSpeed, GetMoveSpeedAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Secondary_BaseMoveSpeed, GetBaseMoveSpeedAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Secondary_BuffMoveSpeed, GetBuffMoveSpeedAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Secondary_ArmorMoveSpeed, GetArmorMoveSpeedAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Secondary_WeightMoveSpeed, GetWeightMoveSpeedAttribute);
 	TagsToAttributes.Add(GameplayTags.Attributes_Secondary_CarryCapacity, GetCarryCapacityAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Secondary_CurrentWeight, GetCurrentWeightAttribute);
 
 	/* Primary Skills Attributes */
 	TagsToAttributes.Add(GameplayTags.Attributes_PrimarySkill_Arcanist, GetArcanistAttribute);
@@ -97,7 +104,13 @@ void ULabyrinthAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty
 	DOREPLIFETIME_CONDITION_NOTIFY(ULabyrinthAttributeSet, MaxHealth, COND_None, REPNOTIFY_Always);	
 	DOREPLIFETIME_CONDITION_NOTIFY(ULabyrinthAttributeSet, MaxMana, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(ULabyrinthAttributeSet, MaxStamina, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(ULabyrinthAttributeSet, MoveSpeed, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(ULabyrinthAttributeSet, BaseMoveSpeed, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(ULabyrinthAttributeSet, BuffMoveSpeed, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(ULabyrinthAttributeSet, ArmorMoveSpeed, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(ULabyrinthAttributeSet, WeightMoveSpeed, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(ULabyrinthAttributeSet, CarryCapacity, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(ULabyrinthAttributeSet, CurrentWeight, COND_None, REPNOTIFY_Always);
 
 	// Primary Skill Attributes
 	DOREPLIFETIME_CONDITION_NOTIFY(ULabyrinthAttributeSet, Arcanist, COND_None, REPNOTIFY_Always);
@@ -190,6 +203,36 @@ void ULabyrinthAttributeSet::PostAttributeChange(const FGameplayAttribute& Attri
 	{
 		SetMana(GetMaxMana());
 		bTopOffMana = false;
+	}
+	if (Attribute == GetCurrentWeightAttribute())
+	{
+		if (GetActorInfo()->AvatarActor->Implements<UPlayerInterface>())
+		{
+			int32 MovementSpeedDecreaseAmount = GetCarryCapacity() - GetCurrentWeight();
+			if (MovementSpeedDecreaseAmount < 0)
+			{
+				SetWeightMoveSpeed(MovementSpeedDecreaseAmount);
+			}
+			else
+			{
+				SetWeightMoveSpeed(0);
+			}
+
+			int32 NewMoveSpeed = CalculateNewMoveSpeed() < 0 ? 0 : CalculateNewMoveSpeed();
+			SetMoveSpeed(NewMoveSpeed);
+		}
+	}
+	if (Attribute == GetArmorMoveSpeedAttribute())
+	{
+		int32 NewMoveSpeed = CalculateNewMoveSpeed() < 0 ? 0 : CalculateNewMoveSpeed();
+		SetMoveSpeed(NewMoveSpeed);
+	}
+	if (Attribute == GetMoveSpeedAttribute())
+	{
+		if (GetActorInfo()->AvatarActor->Implements<UPlayerInterface>())
+		{
+		 		IPlayerInterface::Execute_UpdateMovementSpeed(GetActorInfo()->AvatarActor.Get(), GetMoveSpeed());
+		}
 	}
 }
 
@@ -386,6 +429,11 @@ void ULabyrinthAttributeSet::ShowFloatingText(const FEffectProperties& Props, fl
 	}
 }
 
+int32 ULabyrinthAttributeSet::CalculateNewMoveSpeed()
+{
+	return GetBaseMoveSpeed() + GetArmorMoveSpeed() + GetBuffMoveSpeed() + GetWeightMoveSpeed();
+}
+
 void ULabyrinthAttributeSet::SendXPEvent(const FEffectProperties& Props)
 {
 	if (Props.TargetCharacter->Implements<UCombatInterface>())
@@ -502,9 +550,39 @@ void ULabyrinthAttributeSet::OnRep_MaxStamina(const FGameplayAttributeData& OldM
 	GAMEPLAYATTRIBUTE_REPNOTIFY(ULabyrinthAttributeSet, MaxStamina, OldMaxStamina);
 }
 
+void ULabyrinthAttributeSet::OnRep_MoveSpeed(const FGameplayAttributeData& OldMoveSpeed) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(ULabyrinthAttributeSet, MoveSpeed, OldMoveSpeed);
+}
+
+void ULabyrinthAttributeSet::OnRep_BuffMoveSpeed(const FGameplayAttributeData& OldMoveSpeed) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(ULabyrinthAttributeSet, BuffMoveSpeed, OldMoveSpeed);
+}
+
+void ULabyrinthAttributeSet::OnRep_ArmorMoveSpeed(const FGameplayAttributeData& OldMoveSpeed) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(ULabyrinthAttributeSet, ArmorMoveSpeed, OldMoveSpeed);
+}
+
+void ULabyrinthAttributeSet::OnRep_BaseMoveSpeed(const FGameplayAttributeData& OldBaseMoveSpeed) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(ULabyrinthAttributeSet, BaseMoveSpeed, OldBaseMoveSpeed);
+}
+
+void ULabyrinthAttributeSet::OnRep_WeightMoveSpeed(const FGameplayAttributeData& OldMoveSpeed) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(ULabyrinthAttributeSet, WeightMoveSpeed, OldMoveSpeed);
+}
+
 void ULabyrinthAttributeSet::OnRep_CarryCapacity(const FGameplayAttributeData& OldCarryCapacity) const
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(ULabyrinthAttributeSet, CarryCapacity, OldCarryCapacity);
+}
+
+void ULabyrinthAttributeSet::OnRep_CurrentWeight(const FGameplayAttributeData& OldCarryWeight) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(ULabyrinthAttributeSet, CurrentWeight, OldCarryWeight);
 }
 
 void ULabyrinthAttributeSet::OnRep_FireResistance(const FGameplayAttributeData& OldFireResistance) const

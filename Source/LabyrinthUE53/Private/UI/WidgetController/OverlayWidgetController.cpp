@@ -54,6 +54,20 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 			}
 		);
 
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(GetLabyrinthAS()->GetStaminaAttribute()).AddLambda(
+		[this](const FOnAttributeChangeData& Data)
+			{
+				OnStaminaChanged.Broadcast(Data.NewValue);
+			}
+		);
+
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(GetLabyrinthAS()->GetMaxStaminaAttribute()).AddLambda(
+		[this](const FOnAttributeChangeData& Data)
+			{
+				OnMaxStaminaChanged.Broadcast(Data.NewValue);
+			}
+		);
+	
 	if (GetLabyrinthASC())
 	{
 		GetLabyrinthASC()->AbilityEquipped.AddUObject(this, &UOverlayWidgetController::OnAbilityEquipped);

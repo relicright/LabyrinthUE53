@@ -173,6 +173,11 @@ int32 ALabyrinthCharacter::GetSpellPoints_Implementation() const
 	return LabyrinthPlayerState->GetSpellPoints();
 }
 
+void ALabyrinthCharacter::UpdateMovementSpeed_Implementation(int32 Speed)
+{
+	GetCharacterMovement()->MaxWalkSpeed = Speed;
+}
+
 int32 ALabyrinthCharacter::GetPlayerLevel_Implementation()
 {
 	const ALabyrinthPlayerState* LabyrinthPlayerState = GetPlayerState<ALabyrinthPlayerState>();
@@ -209,8 +214,9 @@ void ALabyrinthCharacter::SetShouldFaceMouseCursor(bool bShouldFace)
 	bShouldFaceMouseCursor = bShouldFace;
 }
 
+
 void ALabyrinthCharacter::EquipArmor_Implementation(const FGameplayTag& ArmorItem, FGameplayTag& ArmorSlotTag,
-	const int32 Level)
+                                                    const int32 Level)
 {
 	// TODO:  Check the overlapping item either by mouse cursor or standing over to see which item should be sent to be equipped.
 	// It might be possible to use Gameplay cue to equip armor, but if not then multicast should work for this.

@@ -71,4 +71,7 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent)
 	void UnEquipArmor(FGameplayTag ArmorSlotTag);
+
+	UFUNCTION(BlueprintNativeEvent)
+	void UpdateMovementSpeed(int32 Speed);
 };

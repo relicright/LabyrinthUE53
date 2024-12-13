@@ -150,9 +150,33 @@ public:
 	FGameplayAttributeData MaxStamina;
 	ATTRIBUTE_ACCESSORS(ULabyrinthAttributeSet, MaxStamina);
 
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MoveSpeed, Category = "Vital Attributes")
+	FGameplayAttributeData MoveSpeed;
+	ATTRIBUTE_ACCESSORS(ULabyrinthAttributeSet, MoveSpeed);
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_BaseMoveSpeed, Category = "Vital Attributes")
+	FGameplayAttributeData BaseMoveSpeed;
+	ATTRIBUTE_ACCESSORS(ULabyrinthAttributeSet, BaseMoveSpeed);
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ArmorMoveSpeed, Category = "Vital Attributes")
+	FGameplayAttributeData ArmorMoveSpeed;
+	ATTRIBUTE_ACCESSORS(ULabyrinthAttributeSet, ArmorMoveSpeed);
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_BuffMoveSpeed, Category = "Vital Attributes")
+	FGameplayAttributeData BuffMoveSpeed;
+	ATTRIBUTE_ACCESSORS(ULabyrinthAttributeSet, BuffMoveSpeed);
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_WeightMoveSpeed, Category = "Vital Attributes")
+	FGameplayAttributeData WeightMoveSpeed;
+	ATTRIBUTE_ACCESSORS(ULabyrinthAttributeSet, WeightMoveSpeed);
+
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_CarryCapacity, Category = "Capacity Attributes")
 	FGameplayAttributeData CarryCapacity;
 	ATTRIBUTE_ACCESSORS(ULabyrinthAttributeSet, CarryCapacity);
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_CurrentWeight, Category = "Capacity Attributes")
+	FGameplayAttributeData CurrentWeight;
+	ATTRIBUTE_ACCESSORS(ULabyrinthAttributeSet, CurrentWeight);
 
 	/*
 	 * Primary Skill Attributes
@@ -211,8 +235,8 @@ public:
 	ATTRIBUTE_ACCESSORS(ULabyrinthAttributeSet, Survival);
 	
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Stealth, Category = "Secondary Skill Attributes")
-    	FGameplayAttributeData Stealth;
-    	ATTRIBUTE_ACCESSORS(ULabyrinthAttributeSet, Stealth);
+    FGameplayAttributeData Stealth;
+    ATTRIBUTE_ACCESSORS(ULabyrinthAttributeSet, Stealth);
     	
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Musicianship, Category = "Secondary Skill Attributes")
 	FGameplayAttributeData Musicianship;
@@ -333,8 +357,26 @@ public:
 	void OnRep_MaxStamina(const FGameplayAttributeData& OldMaxStamina) const;
 
 	UFUNCTION()
+	void OnRep_MoveSpeed(const FGameplayAttributeData& OldMoveSpeed) const;
+
+	UFUNCTION()
+	void OnRep_BaseMoveSpeed(const FGameplayAttributeData& OldBaseMoveSpeed) const;
+
+	UFUNCTION()
+	void OnRep_ArmorMoveSpeed(const FGameplayAttributeData& OldBaseMoveSpeed) const;
+
+	UFUNCTION()
+	void OnRep_BuffMoveSpeed(const FGameplayAttributeData& OldBaseMoveSpeed) const;
+
+	UFUNCTION()
+	void OnRep_WeightMoveSpeed(const FGameplayAttributeData& OldMoveSpeed) const;
+
+	UFUNCTION()
 	void OnRep_CarryCapacity(const FGameplayAttributeData& OldCarryCapacity) const;
 
+	UFUNCTION()
+	void OnRep_CurrentWeight(const FGameplayAttributeData& OldCarryWeight) const;
+	
 	UFUNCTION()
 	void OnRep_FireResistance(const FGameplayAttributeData& OldFireResistance) const;
 
@@ -398,7 +440,12 @@ private:
 	void Debuff(const FEffectProperties& Props);
 	void SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const;
 	void ShowFloatingText(const FEffectProperties& Props, float Damage, bool bBlockedHit, bool bCriticalHit) const;
+	int32 CalculateNewMoveSpeed();
 
 	bool bTopOffHealth = false;
 	bool bTopOffMana = false;
 };
+
+
+
+

@@ -9,60 +9,65 @@
 #include "Game/LabyrinthGameModeBase.h"
 #include "Interaction/CombatInterface.h"
 #include "Kismet/GameplayStatics.h"
+#include "Player/LabyrinthPlayerState.h"
+#include "UI/HUD/LabyrinthHUD.h"
+#include "UI/WidgetController/LabyrinthWidgetController.h"
 
-// bool ULabyrinthAbilitySystemLibrary::MakeWidgetControllerParams(const UObject* WorldContextObject, FWidgetControllerParams& OutWCParams, AAuraHUD*& OutAuraHUD)
-// {
-// 	if (APlayerController* PC = UGameplayStatics::GetPlayerController(WorldContextObject, 0))
-// 	{
-// 		OutAuraHUD = Cast<AAuraHUD>(PC->GetHUD());
-// 		if (OutAuraHUD)
-// 		{
-// 			AAuraPlayerState* PS = PC->GetPlayerState<AAuraPlayerState>();
-// 			UAbilitySystemComponent* ASC = PS->GetAbilitySystemComponent();
-// 			UAttributeSet* AS = PS->GetAttributeSet();
-//
-// 			OutWCParams.AttributeSet = AS;
-// 			OutWCParams.AbilitySystemComponent = ASC;
-// 			OutWCParams.PlayerState = PS;
-// 			OutWCParams.PlayerController = PC;
-// 			return true;
-// 		}
-// 	}
-// 	return false;
-// }
-//
-// UOverlayWidgetController* ULabyrinthAbilitySystemLibrary::GetOverlayWidgetController(const UObject* WorldContextObject)
-// {
-// 	FWidgetControllerParams WCParams;
-// 	AAuraHUD* AuraHUD = nullptr;
-// 	if (MakeWidgetControllerParams(WorldContextObject, WCParams, AuraHUD))
-// 	{
-// 		return AuraHUD->GetOverlayWidgetController(WCParams);
-// 	}
-// 	return nullptr;
-// }
-//
-// UAttributeMenuWidgetController* ULabyrinthAbilitySystemLibrary::GetAttributeMenuWidgetController(const UObject* WorldContextObject)
-// {
-// 	FWidgetControllerParams WCParams;
-// 	AAuraHUD* AuraHUD = nullptr;
-// 	if (MakeWidgetControllerParams(WorldContextObject, WCParams, AuraHUD))
-// 	{
-// 		return AuraHUD->GetAttributeMenuWidgetController(WCParams);
-// 	}
-// 	return nullptr;
-// }
-//
 // USpellMenuWidgetController* ULabyrinthAbilitySystemLibrary::GetSpellMenuWidgetController(const UObject* WorldContextObject)
 // {
 // 	FWidgetControllerParams WCParams;
-// 	AAuraHUD* AuraHUD = nullptr;
-// 	if (MakeWidgetControllerParams(WorldContextObject, WCParams, AuraHUD))
+// 	ALabyrinthHUD* LabyrinthHUD = nullptr;
+// 	if (MakeWidgetControllerParams(WorldContextObject, WCParams, LabyrinthHUD))
 // 	{
-// 		return AuraHUD->GetSpellMenuWidgetController(WCParams);
+// 		return LabyrinthHUD->GetSpellMenuWidgetController(WCParams);
 // 	}
 // 	return nullptr;
 // }
+
+bool ULabyrinthAbilitySystemLibrary::MakeWidgetControllerParams(const UObject* WorldContextObject,
+	FWidgetControllerParams& OutWCParams, ALabyrinthHUD*& OutLabyrinthHUD)
+{
+	if (APlayerController* PC = UGameplayStatics::GetPlayerController(WorldContextObject, 0))
+	{
+		OutLabyrinthHUD = Cast<ALabyrinthHUD>(PC->GetHUD());
+		if (OutLabyrinthHUD)
+		{
+			ALabyrinthPlayerState* PS = PC->GetPlayerState<ALabyrinthPlayerState>();
+			UAbilitySystemComponent* ASC = PS->GetAbilitySystemComponent();
+			UAttributeSet* AS = PS->GetAttributeSet();
+
+			OutWCParams.AttributeSet = AS;
+			OutWCParams.AbilitySystemComponent = ASC;
+			OutWCParams.PlayerState = PS;
+			OutWCParams.PlayerController = PC;
+			return true;
+		}
+	}
+	return false;
+}
+
+UOverlayWidgetController* ULabyrinthAbilitySystemLibrary::GetOverlayWidgetController(const UObject* WorldContextObject)
+{
+	FWidgetControllerParams WCParams;
+	ALabyrinthHUD* LabyrinthHUD = nullptr;
+	if (MakeWidgetControllerParams(WorldContextObject, WCParams, LabyrinthHUD))
+	{
+		return LabyrinthHUD->GetOverlayWidgetController(WCParams);
+	}
+	return nullptr;
+}
+
+UAttributeMenuWidgetController* ULabyrinthAbilitySystemLibrary::GetAttributeMenuWidgetController(
+	const UObject* WorldContextObject)
+{
+	FWidgetControllerParams WCParams;
+	ALabyrinthHUD* LabyrinthHUD = nullptr;
+	if (MakeWidgetControllerParams(WorldContextObject, WCParams, LabyrinthHUD))
+	{
+		return LabyrinthHUD->GetAttributeMenuWidgetController(WCParams);
+	}
+	return nullptr;
+}
 
 void ULabyrinthAbilitySystemLibrary::InitializeDefaultAttributes(const UObject* WorldContextObject, ECharacterClass CharacterClass, float Level, UAbilitySystemComponent* ASC)
 {
@@ -206,70 +211,70 @@ UAttributeXPLevelInfo* ULabyrinthAbilitySystemLibrary::GetAttributeSkillXPInfo(c
 
 UAbilityInfo* ULabyrinthAbilitySystemLibrary::GetAbilityInfo(const UObject* WorldContextObject)
 {
-	const ALabyrinthGameModeBase* AuraGameMode = Cast<ALabyrinthGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
-	if (AuraGameMode == nullptr) return nullptr;
-	return AuraGameMode->AbilityInfo;
+	const ALabyrinthGameModeBase* LabyrinthGameMode = Cast<ALabyrinthGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
+	if (LabyrinthGameMode == nullptr) return nullptr;
+	return LabyrinthGameMode->AbilityInfo;
 }
 
 // ULootTiers* ULabyrinthAbilitySystemLibrary::GetLootTiers(const UObject* WorldContextObject)
 // {
-// 	const ALabyrinthGameModeBase* AuraGameMode = Cast<ALabyrinthGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
-// 	if (AuraGameMode == nullptr) return nullptr;
-// 	return AuraGameMode->LootTiers;
+// 	const ALabyrinthGameModeBase* LabyrinthGameMode = Cast<ALabyrinthGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
+// 	if (LabyrinthGameMode == nullptr) return nullptr;
+// 	return LabyrinthGameMode->LootTiers;
 // }
 
 bool ULabyrinthAbilitySystemLibrary::IsBlockedHit(const FGameplayEffectContextHandle& EffectContextHandle)
 {
-	if (const FLabyrinthGameplayEffectContext* AuraEffectContext = static_cast<const FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
+	if (const FLabyrinthGameplayEffectContext* LabyrinthEffectContext = static_cast<const FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
 	{
-		return AuraEffectContext->IsBlockedHit();
+		return LabyrinthEffectContext->IsBlockedHit();
 	}
 	return false;
 }
 
 bool ULabyrinthAbilitySystemLibrary::IsSuccessfulDebuff(const FGameplayEffectContextHandle& EffectContextHandle)
 {
-	if (const FLabyrinthGameplayEffectContext* AuraEffectContext = static_cast<const FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
+	if (const FLabyrinthGameplayEffectContext* LabyrinthEffectContext = static_cast<const FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
 	{
-		return AuraEffectContext->IsSuccessfulDebuff();
+		return LabyrinthEffectContext->IsSuccessfulDebuff();
 	}
 	return false;
 }
 
 float ULabyrinthAbilitySystemLibrary::GetDebuffDamage(const FGameplayEffectContextHandle& EffectContextHandle)
 {
-	if (const FLabyrinthGameplayEffectContext* AuraEffectContext = static_cast<const FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
+	if (const FLabyrinthGameplayEffectContext* LabyrinthEffectContext = static_cast<const FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
 	{
-		return AuraEffectContext->GetDebuffDamage();
+		return LabyrinthEffectContext->GetDebuffDamage();
 	}
 	return 0.f;
 }
 
 float ULabyrinthAbilitySystemLibrary::GetDebuffDuration(const FGameplayEffectContextHandle& EffectContextHandle)
 {
-	if (const FLabyrinthGameplayEffectContext* AuraEffectContext = static_cast<const FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
+	if (const FLabyrinthGameplayEffectContext* LabyrinthEffectContext = static_cast<const FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
 	{
-		return AuraEffectContext->GetDebuffDuration();
+		return LabyrinthEffectContext->GetDebuffDuration();
 	}
 	return 0.f;
 }
 
 float ULabyrinthAbilitySystemLibrary::GetDebuffFrequency(const FGameplayEffectContextHandle& EffectContextHandle)
 {
-	if (const FLabyrinthGameplayEffectContext* AuraEffectContext = static_cast<const FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
+	if (const FLabyrinthGameplayEffectContext* LabyrinthEffectContext = static_cast<const FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
 	{
-		return AuraEffectContext->GetDebuffFrequency();
+		return LabyrinthEffectContext->GetDebuffFrequency();
 	}
 	return 0.f;
 }
 
 FGameplayTag ULabyrinthAbilitySystemLibrary::GetDamageType(const FGameplayEffectContextHandle& EffectContextHandle)
 {
-	if (const FLabyrinthGameplayEffectContext* AuraEffectContext = static_cast<const FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
+	if (const FLabyrinthGameplayEffectContext* LabyrinthEffectContext = static_cast<const FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
 	{
-		if (AuraEffectContext->GetDamageType().IsValid())
+		if (LabyrinthEffectContext->GetDamageType().IsValid())
 		{
-			return *AuraEffectContext->GetDamageType();
+			return *LabyrinthEffectContext->GetDamageType();
 		}
 	}
 	return FGameplayTag();
@@ -277,178 +282,178 @@ FGameplayTag ULabyrinthAbilitySystemLibrary::GetDamageType(const FGameplayEffect
 
 FVector ULabyrinthAbilitySystemLibrary::GetDeathImpulse(const FGameplayEffectContextHandle& EffectContextHandle)
 {
-	if (const FLabyrinthGameplayEffectContext* AuraEffectContext = static_cast<const FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
+	if (const FLabyrinthGameplayEffectContext* LabyrinthEffectContext = static_cast<const FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
 	{
-		return AuraEffectContext->GetDeathImpulse();
+		return LabyrinthEffectContext->GetDeathImpulse();
 	}
 	return FVector::ZeroVector;
 }
 
 FVector ULabyrinthAbilitySystemLibrary::GetKnockbackForce(const FGameplayEffectContextHandle& EffectContextHandle)
 {
-	if (const FLabyrinthGameplayEffectContext* AuraEffectContext = static_cast<const FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
+	if (const FLabyrinthGameplayEffectContext* LabyrinthEffectContext = static_cast<const FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
 	{
-		return AuraEffectContext->GetKnockbackForce();
+		return LabyrinthEffectContext->GetKnockbackForce();
 	}
 	return FVector::ZeroVector;
 }
 
 bool ULabyrinthAbilitySystemLibrary::IsCriticalHit(const FGameplayEffectContextHandle& EffectContextHandle)
 {
-	if (const FLabyrinthGameplayEffectContext* AuraEffectContext = static_cast<const FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
+	if (const FLabyrinthGameplayEffectContext* LabyrinthEffectContext = static_cast<const FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
 	{
-		return AuraEffectContext->IsCriticalHit();
+		return LabyrinthEffectContext->IsCriticalHit();
 	}
 	return false;
 }
 
 bool ULabyrinthAbilitySystemLibrary::IsRadialDamage(const FGameplayEffectContextHandle& EffectContextHandle)
 {
-	if (const FLabyrinthGameplayEffectContext* AuraEffectContext = static_cast<const FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
+	if (const FLabyrinthGameplayEffectContext* LabyrinthEffectContext = static_cast<const FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
 	{
-		return AuraEffectContext->IsRadialDamage();
+		return LabyrinthEffectContext->IsRadialDamage();
 	}
 	return false;
 }
 
 float ULabyrinthAbilitySystemLibrary::GetRadialDamageInnerRadius(const FGameplayEffectContextHandle& EffectContextHandle)
 {
-	if (const FLabyrinthGameplayEffectContext* AuraEffectContext = static_cast<const FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
+	if (const FLabyrinthGameplayEffectContext* LabyrinthEffectContext = static_cast<const FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
 	{
-		return AuraEffectContext->GetRadialDamageInnerRadius();
+		return LabyrinthEffectContext->GetRadialDamageInnerRadius();
 	}
 	return 0.f;
 }
 
 float ULabyrinthAbilitySystemLibrary::GetRadialDamageOuterRadius(const FGameplayEffectContextHandle& EffectContextHandle)
 {
-	if (const FLabyrinthGameplayEffectContext* AuraEffectContext = static_cast<const FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
+	if (const FLabyrinthGameplayEffectContext* LabyrinthEffectContext = static_cast<const FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
 	{
-		return AuraEffectContext->GetRadialDamageOuterRadius();
+		return LabyrinthEffectContext->GetRadialDamageOuterRadius();
 	}
 	return 0.f;
 }
 
 FVector ULabyrinthAbilitySystemLibrary::GetRadialDamageOrigin(const FGameplayEffectContextHandle& EffectContextHandle)
 {
-	if (const FLabyrinthGameplayEffectContext* AuraEffectContext = static_cast<const FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
+	if (const FLabyrinthGameplayEffectContext* LabyrinthEffectContext = static_cast<const FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
 	{
-		return AuraEffectContext->GetRadialDamageOrigin();
+		return LabyrinthEffectContext->GetRadialDamageOrigin();
 	}
 	return FVector::ZeroVector;
 }
 
 void ULabyrinthAbilitySystemLibrary::SetIsBlockedHit(FGameplayEffectContextHandle& EffectContextHandle, bool bInIsBlockedHit)
 {
-	if (FLabyrinthGameplayEffectContext* AuraEffectContext = static_cast<FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
+	if (FLabyrinthGameplayEffectContext* LabyrinthEffectContext = static_cast<FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
 	{
-		AuraEffectContext->SetIsBlockedHit(bInIsBlockedHit);
+		LabyrinthEffectContext->SetIsBlockedHit(bInIsBlockedHit);
 	}
 }
 
 void ULabyrinthAbilitySystemLibrary::SetIsCriticalHit(FGameplayEffectContextHandle& EffectContextHandle,
 	bool bInIsCriticalHit)
 {
-	if (FLabyrinthGameplayEffectContext* AuraEffectContext = static_cast<FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
+	if (FLabyrinthGameplayEffectContext* LabyrinthEffectContext = static_cast<FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
 	{
-		AuraEffectContext->SetIsCriticalHit(bInIsCriticalHit);
+		LabyrinthEffectContext->SetIsCriticalHit(bInIsCriticalHit);
 	}
 }
 
 void ULabyrinthAbilitySystemLibrary::SetIsSuccessfulDebuff(FGameplayEffectContextHandle& EffectContextHandle,
 	bool bInSuccessfulDebuff)
 {
-	if (FLabyrinthGameplayEffectContext* AuraEffectContext = static_cast<FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
+	if (FLabyrinthGameplayEffectContext* LabyrinthEffectContext = static_cast<FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
 	{
-		AuraEffectContext->SetIsSuccessfulDebuff(bInSuccessfulDebuff);
+		LabyrinthEffectContext->SetIsSuccessfulDebuff(bInSuccessfulDebuff);
 	}
 }
 
 void ULabyrinthAbilitySystemLibrary::SetDebuffDamage(FGameplayEffectContextHandle& EffectContextHandle, float InDamage)
 {
-	if (FLabyrinthGameplayEffectContext* AuraEffectContext = static_cast<FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
+	if (FLabyrinthGameplayEffectContext* LabyrinthEffectContext = static_cast<FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
 	{
-		AuraEffectContext->SetDebuffDamage(InDamage);
+		LabyrinthEffectContext->SetDebuffDamage(InDamage);
 	}
 }
 
 void ULabyrinthAbilitySystemLibrary::SetDebuffDuration(FGameplayEffectContextHandle& EffectContextHandle, float InDuration)
 {
-	if (FLabyrinthGameplayEffectContext* AuraEffectContext = static_cast<FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
+	if (FLabyrinthGameplayEffectContext* LabyrinthEffectContext = static_cast<FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
 	{
-		AuraEffectContext->SetDebuffDuration(InDuration);
+		LabyrinthEffectContext->SetDebuffDuration(InDuration);
 	}
 }
 
 void ULabyrinthAbilitySystemLibrary::SetDebuffFrequency(FGameplayEffectContextHandle& EffectContextHandle, float InFrequency)
 {
-	if (FLabyrinthGameplayEffectContext* AuraEffectContext = static_cast<FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
+	if (FLabyrinthGameplayEffectContext* LabyrinthEffectContext = static_cast<FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
 	{
-		AuraEffectContext->SetDebuffFrequency(InFrequency);
+		LabyrinthEffectContext->SetDebuffFrequency(InFrequency);
 	}
 }
 
 void ULabyrinthAbilitySystemLibrary::SetDamageType(FGameplayEffectContextHandle& EffectContextHandle,
 	const FGameplayTag& InDamageType)
 {
-	if (FLabyrinthGameplayEffectContext* AuraEffectContext = static_cast<FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
+	if (FLabyrinthGameplayEffectContext* LabyrinthEffectContext = static_cast<FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
 	{
 		const TSharedPtr<FGameplayTag> DamageType = MakeShared<FGameplayTag>(InDamageType);
-		AuraEffectContext->SetDamageType(DamageType);
+		LabyrinthEffectContext->SetDamageType(DamageType);
 	}
 }
 
 void ULabyrinthAbilitySystemLibrary::SetDeathImpulse(FGameplayEffectContextHandle& EffectContextHandle,
 	const FVector& InImpulse)
 {
-	if (FLabyrinthGameplayEffectContext* AuraEffectContext = static_cast<FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
+	if (FLabyrinthGameplayEffectContext* LabyrinthEffectContext = static_cast<FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
 	{
-		AuraEffectContext->SetDeathImpulse(InImpulse);
+		LabyrinthEffectContext->SetDeathImpulse(InImpulse);
 	}
 }
 
 void ULabyrinthAbilitySystemLibrary::SetKnockbackForce(FGameplayEffectContextHandle& EffectContextHandle,
 	const FVector& InForce)
 {
-	if (FLabyrinthGameplayEffectContext* AuraEffectContext = static_cast<FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
+	if (FLabyrinthGameplayEffectContext* LabyrinthEffectContext = static_cast<FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
 	{
-		AuraEffectContext->SetKnockbackForce(InForce);
+		LabyrinthEffectContext->SetKnockbackForce(InForce);
 	}
 }
 
 void ULabyrinthAbilitySystemLibrary::SetIsRadialDamage(FGameplayEffectContextHandle& EffectContextHandle,
 	bool bInIsRadialDamage)
 {
-	if (FLabyrinthGameplayEffectContext* AuraEffectContext = static_cast<FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
+	if (FLabyrinthGameplayEffectContext* LabyrinthEffectContext = static_cast<FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
 	{
-		AuraEffectContext->SetIsRadialDamage(bInIsRadialDamage);
+		LabyrinthEffectContext->SetIsRadialDamage(bInIsRadialDamage);
 	}
 }
 
 void ULabyrinthAbilitySystemLibrary::SetRadialDamageInnerRadius(FGameplayEffectContextHandle& EffectContextHandle,
 	float InInnerRadius)
 {
-	if (FLabyrinthGameplayEffectContext* AuraEffectContext = static_cast<FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
+	if (FLabyrinthGameplayEffectContext* LabyrinthEffectContext = static_cast<FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
 	{
-		AuraEffectContext->SetRadialDamageInnerRadius(InInnerRadius);
+		LabyrinthEffectContext->SetRadialDamageInnerRadius(InInnerRadius);
 	}
 }
 
 void ULabyrinthAbilitySystemLibrary::SetRadialDamageOuterRadius(FGameplayEffectContextHandle& EffectContextHandle,
 	float InOuterRadius)
 {
-	if (FLabyrinthGameplayEffectContext* AuraEffectContext = static_cast<FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
+	if (FLabyrinthGameplayEffectContext* LabyrinthEffectContext = static_cast<FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
 	{
-		AuraEffectContext->SetRadialDamageOuterRadius(InOuterRadius);
+		LabyrinthEffectContext->SetRadialDamageOuterRadius(InOuterRadius);
 	}
 }
 
 void ULabyrinthAbilitySystemLibrary::SetRadialDamageOrigin(FGameplayEffectContextHandle& EffectContextHandle,
 	const FVector& InOrigin)
 {
-	if (FLabyrinthGameplayEffectContext* AuraEffectContext = static_cast<FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
+	if (FLabyrinthGameplayEffectContext* LabyrinthEffectContext = static_cast<FLabyrinthGameplayEffectContext*>(EffectContextHandle.Get()))
 	{
-		AuraEffectContext->SetRadialDamageOrigin(InOrigin);
+		LabyrinthEffectContext->SetRadialDamageOrigin(InOrigin);
 	}
 }
 

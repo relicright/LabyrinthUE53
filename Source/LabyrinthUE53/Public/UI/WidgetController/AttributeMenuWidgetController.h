@@ -14,7 +14,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAttributeInfoSignature, const FLaby
 /**
  * 
  */
-UCLASS()
+UCLASS(BlueprintType, Blueprintable)
 class LABYRINTHUE53_API UAttributeMenuWidgetController : public ULabyrinthWidgetController
 {
 	GENERATED_BODY()

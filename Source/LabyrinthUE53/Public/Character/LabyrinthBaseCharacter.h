@@ -133,8 +133,14 @@ protected:
 	
 	virtual void StunTagChanged(const FGameplayTag CallbackTag, int32 NewCount);
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Combat")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement")
 	float BaseWalkSpeed = 600.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement")
+	float ArmorWalkSpeed = 0.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement")
+	float BuffWalkSpeed = 0.f;
 
 	virtual void InitAbilityActorInfo();
 
