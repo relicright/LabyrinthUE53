@@ -14,7 +14,7 @@
 #include "Interaction/CombatInterface.h"
 #include "Interaction/PlayerInterface.h"
 #include "Player/LabyrinthPlayerController.h"
-
+//TEST
 ULabyrinthAttributeSet::ULabyrinthAttributeSet()
 {
 	const FLabyrinthGameplayTags& GameplayTags = FLabyrinthGameplayTags::Get();

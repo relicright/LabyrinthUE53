@@ -8,6 +8,7 @@ FLabyrinthGameplayTags FLabyrinthGameplayTags::GameplayTags;
 
 void FLabyrinthGameplayTags::InitializeNativeGameplayTags()
 {
+	//TEST
 	/*
 	 * Primary Attributes
 	 */

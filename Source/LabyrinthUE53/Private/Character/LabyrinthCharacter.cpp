@@ -175,6 +175,7 @@ int32 ALabyrinthCharacter::GetSpellPoints_Implementation() const
 
 void ALabyrinthCharacter::UpdateMovementSpeed_Implementation(int32 Speed)
 {
+	//TEST
 	GetCharacterMovement()->MaxWalkSpeed = Speed;
 }
 

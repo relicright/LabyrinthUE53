@@ -12,7 +12,7 @@ class USpringArmComponent;
 struct FGameplayAttribute;
 
 /**
- * 
+ * //TEST
  */
 UCLASS()
 class LABYRINTHUE53_API ALabyrinthCharacter : public ALabyrinthBaseCharacter, public IPlayerInterface
