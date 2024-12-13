@@ -39,6 +39,9 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<ULevelUpInfo> LevelUpInfo;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Ability Info")
+	TObjectPtr<UArmorItemInfo> ArmorItemInfo;
+
 	FOnPlayerStatChanged OnXPChangedDelegate;
 	FOnPlayerStatChanged OnXPToAttributeChangedDelegate;
 	FOnLevelChanged OnLevelChangedDelegate;
@@ -66,7 +69,9 @@ public:
 	void ApplyEquipmentArmorEffect(TSubclassOf<UGameplayEffect> GameplayEffectClass, const FGameplayTag& SlotTag, const FItemDefaultInfo& ArmorInfo,  int32 ItemLevel);
 	void RemoveEquipmentArmorEffect(FGameplayTag Tag);
 	void RemoveEquipmentArmorEffectAndApplyNew(FGameplayTag Tag, TSubclassOf<UGameplayEffect> GameplayEffectClass, const FGameplayTag& SlotTag, const FItemDefaultInfo& ArmorInfo,  int32 ItemLevel);
-
+	void RemoveEquipmentArmorVisual(FGameplayTag SlotTag);
+	void AddEquipmentArmorVisual(FGameplayTag SlotTag, const FItemDefaultInfo& ArmorInfo);
+	
 protected:
 	
 	UPROPERTY(VisibleAnywhere)

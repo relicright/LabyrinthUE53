@@ -14,10 +14,10 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Player/LabyrinthPlayerState.h"
-#include "LabyrinthUE53/Public/Interaction/CombatInterface.h"
-#include "Net/UnrealNetwork.h"
 #include "Player/LabyrinthPlayerController.h"
 #include "UI/HUD/LabyrinthHUD.h"
+#include "LabyrinthUE53/Public/Interaction/CombatInterface.h"
+#include "Net/UnrealNetwork.h"
 
 ALabyrinthCharacter::ALabyrinthCharacter()
 {
@@ -175,7 +175,12 @@ int32 ALabyrinthCharacter::GetSpellPoints_Implementation() const
 
 void ALabyrinthCharacter::UpdateMovementSpeed_Implementation(int32 Speed)
 {
-	//TEST
+	GetCharacterMovement()->MaxWalkSpeed = Speed;
+	ClientUpdateMovementSpeed(Speed);
+}
+
+void ALabyrinthCharacter::ClientUpdateMovementSpeed_Implementation(int32 Speed)
+{
 	GetCharacterMovement()->MaxWalkSpeed = Speed;
 }
 
@@ -215,7 +220,6 @@ void ALabyrinthCharacter::SetShouldFaceMouseCursor(bool bShouldFace)
 	bShouldFaceMouseCursor = bShouldFace;
 }
 
-
 void ALabyrinthCharacter::EquipArmor_Implementation(const FGameplayTag& ArmorItem, FGameplayTag& ArmorSlotTag,
                                                     const int32 Level)
 {
@@ -240,6 +244,7 @@ void ALabyrinthCharacter::ServerEquipArmor_Implementation(const FGameplayTag& Ar
 	const FItemDefaultInfo ArmorInfo = LabyrinthGameMode->ArmorItemInfo->GetArmorItemInfo(ArmorItem);
 	LabyrinthPlayerState->ApplyEquipmentArmorEffect(ArmorInfo.PrimaryGameplayEffect, ArmorInfo.EquipmentSlotTag, ArmorInfo, Level);
 
+	MulticastEquipArmor(ArmorItem, ArmorSlotTag);
 	// TODO: Should most likely send a multicast here to show the item equipped on the player to everyone
 }
 
@@ -256,7 +261,62 @@ void ALabyrinthCharacter::ServerUnEquipArmor_Implementation(const FGameplayTag A
 	check(LabyrinthPlayerState);
 	LabyrinthPlayerState->RemoveEquipmentArmorEffect(ArmorSlotTag);
 
+	MulticastUnEquipArmor(ArmorSlotTag);
 	// TODO: Should most likely send a multicast here to remove the item equipped on the player to everyone
+}
+
+void ALabyrinthCharacter::MulticastEquipArmor_Implementation(const FGameplayTag& ArmorItem,
+	const FGameplayTag& ArmorSlotTag)
+{
+	ALabyrinthPlayerState* LabyrinthPlayerState = GetPlayerState<ALabyrinthPlayerState>();
+	check(LabyrinthPlayerState);
+	const FItemDefaultInfo ArmorInfo = LabyrinthPlayerState->ArmorItemInfo->GetArmorItemInfo(ArmorItem);
+
+	bool bFoundEquippedArmor = false;
+	for (auto Pair : EquippedArmor)
+	{
+		if (Pair.Key == ArmorInfo.EquipmentSlotTag)
+		{
+			// Already has equipment
+			bFoundEquippedArmor = true;
+			UE_LOG(LogTemp, Warning, TEXT("Already has armor equipped in this slot"));
+		}
+	}
+
+	if (!bFoundEquippedArmor)
+	{
+		EquippedArmor.Add(ArmorInfo.EquipmentSlotTag, ArmorInfo);
+		UE_LOG(LogTemp, Warning, TEXT("armor equipped in this slot"));
+
+		if (ArmorInfo.EquipmentSlotTag == FLabyrinthGameplayTags::Get().Equipment_Armor_Chest) Chest->SetSkeletalMesh(ArmorInfo.Mesh);
+		else if (ArmorInfo.EquipmentSlotTag == FLabyrinthGameplayTags::Get().Equipment_Armor_Helmet) Helmet->SetSkeletalMesh(ArmorInfo.Mesh);
+		else if (ArmorInfo.EquipmentSlotTag == FLabyrinthGameplayTags::Get().Equipment_Armor_Legs) Pants->SetSkeletalMesh(ArmorInfo.Mesh);
+		else if (ArmorInfo.EquipmentSlotTag == FLabyrinthGameplayTags::Get().Equipment_Armor_Feet) Boots->SetSkeletalMesh(ArmorInfo.Mesh);
+		else if (ArmorInfo.EquipmentSlotTag == FLabyrinthGameplayTags::Get().Equipment_Armor_Gloves) Gloves->SetSkeletalMesh(ArmorInfo.Mesh);
+	}
+}
+
+void ALabyrinthCharacter::MulticastUnEquipArmor_Implementation(const FGameplayTag ArmorSlotTag)
+{
+	bool bFoundEquippedArmor = false;
+	for (auto Pair : EquippedArmor)
+	{
+		if (Pair.Key == ArmorSlotTag)
+		{
+			// Already has equipment
+			bFoundEquippedArmor = true;
+			UE_LOG(LogTemp, Warning, TEXT("Already has armor equipped in this slot"));
+		}
+	}
+	if (bFoundEquippedArmor)
+	{
+		EquippedArmor.Remove(ArmorSlotTag);
+		if (ArmorSlotTag == FLabyrinthGameplayTags::Get().Equipment_Armor_Chest) Chest->SetSkeletalMesh(nullptr);
+		else if (ArmorSlotTag == FLabyrinthGameplayTags::Get().Equipment_Armor_Helmet) Helmet->SetSkeletalMesh(nullptr);
+		else if (ArmorSlotTag == FLabyrinthGameplayTags::Get().Equipment_Armor_Legs) Pants->SetSkeletalMesh(nullptr);
+		else if (ArmorSlotTag == FLabyrinthGameplayTags::Get().Equipment_Armor_Feet) Boots->SetSkeletalMesh(nullptr);
+		else if (ArmorSlotTag == FLabyrinthGameplayTags::Get().Equipment_Armor_Gloves) Gloves->SetSkeletalMesh(nullptr);
+	}
 }
 
 void ALabyrinthCharacter::ServerSetCharacterPawnRotation_Implementation(FRotator NewRotation)

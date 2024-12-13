@@ -7,6 +7,7 @@
 #include "AbilitySystem/Data/CharacterClassInfo.h"
 #include "GameFramework/Character.h"
 #include "Interaction/CombatInterface.h"
+#include "AbilitySystem/Data/ItemInfo.h"
 #include "LabyrinthBaseCharacter.generated.h"
 
 class UAbilitySystemComponent;
@@ -102,6 +103,9 @@ protected:
 	TObjectPtr<USkeletalMeshComponent> Weapon;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Combat")
+	TObjectPtr<USkeletalMeshComponent> LeftHand;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Combat")
 	TObjectPtr<USkeletalMeshComponent> Helmet;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Combat")
@@ -116,6 +120,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Combat")
 	TObjectPtr<USkeletalMeshComponent> Boots;
 
+	UPROPERTY()
+	TMap<FGameplayTag, FItemDefaultInfo> EquippedArmor;
+	
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	FName WeaponTipSocketName;
 

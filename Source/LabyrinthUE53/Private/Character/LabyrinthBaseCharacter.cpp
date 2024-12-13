@@ -20,7 +20,11 @@ ALabyrinthBaseCharacter::ALabyrinthBaseCharacter()
 	const FLabyrinthGameplayTags& GameplayTags = FLabyrinthGameplayTags::Get();
 
 	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>("Weapon");
-	Weapon->SetupAttachment(GetMesh(), FName("WeaponHandSocket"));
+	Weapon->SetupAttachment(GetMesh(), FName("RightHandHandSocket"));
+	Weapon->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>("LeftHand");
+	Weapon->SetupAttachment(GetMesh(), FName("LeftHandHandSocket"));
 	Weapon->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	Helmet = CreateDefaultSubobject<USkeletalMeshComponent>("Helmet");

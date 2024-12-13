@@ -8,6 +8,7 @@
 #include "AbilitySystem/LabyrinthAttributeSet.h"
 #include "AbilitySystem/Data/ItemInfo.h"
 #include "AbilitySystem/Data/AttributeXPLevelInfo.h"
+#include "Interaction/PlayerInterface.h"
 #include "Net/UnrealNetwork.h"
 
 ALabyrinthPlayerState::ALabyrinthPlayerState()
@@ -206,6 +207,18 @@ void ALabyrinthPlayerState::RemoveEquipmentArmorEffectAndApplyNew(FGameplayTag T
 		);
 	const FActiveGameplayEffectHandle ActiveEffectHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data.Get());
 	ActiveArmorEffectHandles.Add(ActiveEffectHandle, SlotTag);
+}
+
+void ALabyrinthPlayerState::RemoveEquipmentArmorVisual(FGameplayTag SlotTag)
+{
+	check(AbilitySystemComponent);
+
+
+}
+
+void ALabyrinthPlayerState::AddEquipmentArmorVisual(FGameplayTag SlotTag, const FItemDefaultInfo& ArmorInfo)
+{
+	
 }
 
 void ALabyrinthPlayerState::OnRep_LastSkillUsed(FGameplayTag OldLastSkillUsed)

@@ -12,8 +12,9 @@ class USpringArmComponent;
 struct FGameplayAttribute;
 
 /**
- * //TEST
+ * 
  */
+
 UCLASS()
 class LABYRINTHUE53_API ALabyrinthCharacter : public ALabyrinthBaseCharacter, public IPlayerInterface
 {
@@ -80,7 +81,11 @@ public:
 	UFUNCTION(Server, Reliable)
 	void ServerUnEquipArmor(const FGameplayTag ArmorSlotTag);
 
-protected:
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastEquipArmor(const FGameplayTag& ArmorItem, const FGameplayTag& ArmorSlotTag);
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastUnEquipArmor(const FGameplayTag ArmorSlotTag);
 
 private:
 	UPROPERTY(VisibleAnywhere)
@@ -90,6 +95,9 @@ private:
 	TObjectPtr<USpringArmComponent> CameraBoom;
 	
 	virtual void InitAbilityActorInfo() override;
+
+	UFUNCTION(Client, Reliable)
+	void ClientUpdateMovementSpeed(int32 Speed);
 
 	bool bShouldFaceMouseCursor = true;
 
